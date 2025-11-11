@@ -12,7 +12,7 @@
 }
 
 body {
-  background: url('/assets/img/bg.png');
+  background: url('assets/img/bg.png');
 }
 .container {
   padding: 40px 32px 20px 32px;
@@ -147,7 +147,6 @@ body {
 
   height: 565px;
 }
-
 
 /* Aside (right) */
 .section-map__aside {
@@ -343,52 +342,52 @@ body {
 }
 /* arrow */
 .aside__arrow {
- width: 24px;
- height: 24px;
- display: inline-grid;
- place-items: center;
- padding: 0;
- border: 0;
- background: none;
- cursor: pointer;
- /* Стан за замовчуванням (ВІДКРИТО) - стрілка дивиться вгору/вниз */
- transform: rotate(180deg); 
- transition: transform 0.2s ease;
+  width: 24px;
+  height: 24px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  /* Стан за замовчуванням (ВІДКРИТО) - стрілка дивиться вгору/вниз */
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
 }
 
 /* Тепер .is-open означатиме "ЗАКРИТО" */
 .aside__arrow.is-open {
- /* Стан при кліку (ЗАКРИТО) - стрілка повертається */
- transform: rotate(0deg); 
+  /* Стан при кліку (ЗАКРИТО) - стрілка повертається */
+  transform: rotate(0deg);
 }
 
 .aside__arrow svg {
- width: 24px;
- height: 24px;
- display: block;
+  width: 24px;
+  height: 24px;
+  display: block;
 }
 
 /* promo image below arrow */
 .aside__promo {
- /* Стан за замовчуванням (ВІДКРИТО) */
- display: flex; 
- justify-content: center;
- align-items: center;
- /* display: none; <-- ВИДАЛЕНО */
- margin: 14px 16px 20px 16px;
+  /* Стан за замовчуванням (ВІДКРИТО) */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* display: none; <-- ВИДАЛЕНО */
+  margin: 14px 16px 20px 16px;
 }
 
 /* Тепер .is-open означатиме "ЗАКРИТО" */
 .aside__promo.is-open {
- /* Стан при кліку (ЗАКРИТО) */
- display: none; 
- /* justify-content та align-items не потрібні для display: none */
+  /* Стан при кліку (ЗАКРИТО) */
+  display: none;
+  /* justify-content та align-items не потрібні для display: none */
 }
 
 .aside__promo-img {
- width: 330px;
- height: 85px;
- display: block;
+  width: 330px;
+  height: 85px;
+  display: block;
 }
 .action-btn .state-close {
   display: none;
