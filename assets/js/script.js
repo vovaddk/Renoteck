@@ -1,303 +1,236 @@
-// chips single-select
-document.querySelectorAll('.chip').forEach((ch) => {
-  ch.addEventListener('click', () => {
+document.querySelectorAll('.chip').forEach((e) => {
+  e.addEventListener('click', () => {
     document
       .querySelectorAll('.chip')
-      .forEach((x) => x.classList.remove('active'));
-    ch.classList.add('active');
+      .forEach((e) => e.classList.remove('active')),
+      e.classList.add('active');
   });
-});
-
-// segmented control single-select
-document.querySelectorAll('.segmented__btn').forEach((b) => {
-  b.addEventListener('click', () => {
-    document
-      .querySelectorAll('.segmented__btn')
-      .forEach((x) => x.classList.remove('is-active'));
-    b.classList.add('is-active');
-  });
-});
-
-// активна синя ділянка (висота/зсув) без зміни скролу
-(() => {
-  const list = document.getElementById('projects');
-  const active = document.getElementById('sbActive');
-  const TRACK = 371;
-
-  const clamp01 = (x) => Math.max(0, Math.min(1, x));
-
-  function update() {
-    const viewH = list.clientHeight;
-    const fullH = list.scrollHeight;
-    const max = Math.max(fullH - viewH, 1);
-
-    const h = Math.max(24, Math.round((viewH / fullH) * TRACK));
-    const top = Math.round((list.scrollTop / max) * (TRACK - h));
-
-    active.style.height = h + 'px';
-    active.style.marginTop = top + 'px';
-  }
-  list.addEventListener('scroll', update);
-  window.addEventListener('resize', update);
-  update();
-})();
-
-(() => {
-  const arrow = document.getElementById('asideArrow');
-  const promo = document.getElementById('asidePromo');
-
-  function togglePromo() {
-    const open = !arrow.classList.contains('is-open');
-    arrow.classList.toggle('is-open', open);
-    arrow.setAttribute('aria-expanded', String(open));
-    promo.classList.toggle('is-open', open);
-  }
-
-  arrow.addEventListener('click', togglePromo);
-})();
-(() => {
-  const btn = document.getElementById('servicesBtn');
-  const menu = document.getElementById('servicesMenu');
-  const inner = document.getElementById('servicesInner');
-
-  const track = () => menu.querySelector('.services-scrollbar');
-  const active = () => document.getElementById('svcSbActive');
-
-  function updateServicesScrollbar() {
-    const t = track();
-    if (!t) return;
-    const a = active();
-    if (!a) return;
-
-    const trackH = t.clientHeight; // видима висота треку
-    const viewH = inner.clientHeight; // видима висота контенту
-    const fullH = inner.scrollHeight; // повна висота контенту
-    const max = Math.max(fullH - viewH, 1);
-
-    const h = Math.max(24, Math.round((viewH / fullH) * trackH));
-    const top = Math.round((inner.scrollTop / max) * (trackH - h));
-
-    t.style.setProperty('--svc-h', h + 'px');
-    t.style.setProperty('--svc-top', top + 'px');
-  }
-
-  function openMenu() {
-    if (menu.classList.contains('is-open')) return;
-    menu.classList.add('is-open');
-    btn.classList.add('is-open');
-    btn.setAttribute('aria-expanded', 'true');
-    requestAnimationFrame(updateServicesScrollbar);
-  }
-  function closeMenu() {
-    if (!menu.classList.contains('is-open')) return;
-    menu.classList.remove('is-open');
-    btn.classList.remove('is-open');
-    btn.setAttribute('aria-expanded', 'false');
-  }
-
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    menu.classList.contains('is-open') ? closeMenu() : openMenu();
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!menu.contains(e.target) && !btn.contains(e.target)) closeMenu();
-  });
-
-  inner.addEventListener('scroll', updateServicesScrollbar, { passive: true });
-  window.addEventListener('resize', updateServicesScrollbar);
-
-  // розкриття секцій і чекбокси
-  menu.addEventListener('click', (e) => {
-    const toggler = e.target.closest('[data-toggle]');
-    if (toggler) {
-      toggler.closest('.services-item').classList.toggle('is-open');
-      requestAnimationFrame(updateServicesScrollbar);
-      return;
+}),
+  document.querySelectorAll('.segmented__btn').forEach((e) => {
+    e.addEventListener('click', () => {
+      document
+        .querySelectorAll('.segmented__btn')
+        .forEach((e) => e.classList.remove('is-active')),
+        e.classList.add('is-active');
+    });
+  }),
+  (() => {
+    let e = document.getElementById('projects'),
+      t = document.getElementById('sbActive');
+    function s() {
+      let s = e.clientHeight,
+        i = e.scrollHeight,
+        n = Math.max(24, Math.round((s / i) * 371)),
+        c = Math.round((e.scrollTop / Math.max(i - s, 1)) * (371 - n));
+      (t.style.height = n + 'px'), (t.style.marginTop = c + 'px');
     }
-    const opt = e.target.closest('.service-opt');
-    if (opt) {
-      opt.classList.toggle('is-checked');
-      const input = opt.querySelector('input');
-      if (input) input.checked = opt.classList.contains('is-checked');
+    e.addEventListener('scroll', s), window.addEventListener('resize', s), s();
+  })(),
+  (() => {
+    let e = document.getElementById('asideArrow'),
+      t = document.getElementById('asidePromo');
+    function s() {
+      let s = !e.classList.contains('is-open');
+      e.classList.toggle('is-open', s),
+        e.setAttribute('aria-expanded', String(s)),
+        t.classList.toggle('is-open', s);
     }
-  });
-
-  // якщо контент змінюється
-  new MutationObserver(() =>
-    requestAnimationFrame(updateServicesScrollbar)
-  ).observe(inner, { subtree: true, childList: true });
-})();
-(() => {
-  const btn = document.getElementById('locationBtn');
-  const menu = document.getElementById('locationMenu');
-  const input = menu?.querySelector('.location-input');
-  if (!btn || !menu) return;
-
-  function openMenu() {
-    if (menu.classList.contains('is-open')) return;
-    menu.classList.add('is-open');
-    btn.classList.add('is-open');
-    btn.setAttribute('aria-expanded', 'true');
-    if (input) setTimeout(() => input.focus(), 0);
-  }
-  function closeMenu() {
-    if (!menu.classList.contains('is-open')) return;
-    menu.classList.remove('is-open');
-    btn.classList.remove('is-open');
-    btn.setAttribute('aria-expanded', 'false');
-  }
-
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    menu.classList.contains('is-open') ? closeMenu() : openMenu();
-  });
-
-  menu.addEventListener('click', (e) => e.stopPropagation());
-  document.addEventListener('click', (e) => {
-    if (!menu.contains(e.target) && !btn.contains(e.target)) closeMenu();
-  });
-})();
-// open modal from any .project__link
-(() => {
-  const modal = document.getElementById('projectModal');
-  if (!modal) return;
-
-  const dialog = modal.querySelector('.project-modal__dialog');
-  const closeEls = modal.querySelectorAll('[data-close]');
-  const links = document.querySelectorAll('.project__link');
-
-  function lockBody(lock) {
-    document.documentElement.style.overflow = lock ? 'hidden' : '';
-  }
-  function openModal(e) {
-    if (e) e.preventDefault();
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
-    lockBody(true);
-  }
-  function closeModal() {
-    modal.classList.remove('is-open');
-    modal.setAttribute('aria-hidden', 'true');
-    lockBody(false);
-  }
-
-  links.forEach((a) => a.addEventListener('click', openModal));
-  closeEls.forEach((el) => el.addEventListener('click', closeModal));
-  modal.addEventListener('click', (e) => {
-    if (!dialog.contains(e.target)) closeModal();
-  });
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
-
-  // lightweight slider (prev/next + dots)
-  const slides = Array.from(modal.querySelectorAll('.media-slide'));
-  const dots = Array.from(modal.querySelectorAll('.media-pagination .dot'));
-  const prev = modal.querySelector('#mdPrev');
-  const next = modal.querySelector('#mdNext');
-
-  let idx = 0;
-  function setSlide(i) {
-    idx = (i + slides.length) % slides.length;
-    slides.forEach((s, k) => s.classList.toggle('is-active', k === idx));
-    dots.forEach((d, k) => d.classList.toggle('is-active', k === idx));
-  }
-  prev.addEventListener('click', () => setSlide(idx - 1));
-  next.addEventListener('click', () => setSlide(idx + 1));
-  dots.forEach((d, k) => d.addEventListener('click', () => setSlide(k)));
-})();
-(() => {
-  const btn = document.getElementById('mediaBtn');
-  // ЗМІНЕНО ТУТ:
-  const menu = document.getElementById('asideScroll'); // Було 'mediaMenu'
-
-  if (!btn || !menu) return; // Також додав !menu для надійності
-
-  function open() {
-    btn.classList.add('is-open');
-    btn.setAttribute('aria-expanded', 'true');
-    menu.classList.add('is-open'); // Тепер це буде працювати
-  }
-  function close() {
-    btn.classList.remove('is-open');
-    btn.setAttribute('aria-expanded', 'false');
-    menu.classList.remove('is-open'); // І тут
-  }
-
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    btn.classList.contains('is-open') ? close() : open();
-  });
-
-  document.addEventListener('click', (e) => {
-    // Ця логіка тепер коректно закриватиме меню при кліку поза ним
-    if (!btn.contains(e.target) && !menu.contains(e.target)) close();
-  });
-})();
-(() => {
-  const modal = document.getElementById('projectModal');
-  if (!modal) return;
-
-  const dialog = modal.querySelector('.project-modal__dialog');
-  const closeEls = modal.querySelectorAll('[data-close]');
-  const links = document.querySelectorAll('.project__link');
-
-  // --- відкриття / закриття ---
-  function lockBody(lock) {
-    document.documentElement.style.overflow = lock ? 'hidden' : '';
-  }
-  function openModal(e) {
-    if (e) e.preventDefault();
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
-    lockBody(true);
-  }
-  function closeModal() {
-    modal.classList.remove('is-open');
-    modal.setAttribute('aria-hidden', 'true');
-    lockBody(false);
-  }
-
-  links.forEach((a) => a.addEventListener('click', openModal));
-  closeEls.forEach((el) => el.addEventListener('click', closeModal));
-  modal.addEventListener('click', (e) => {
-    if (!dialog.contains(e.target)) closeModal();
-  });
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
-
-  // --- універсальний слайдер ---
-  const slides = Array.from(modal.querySelectorAll('.media-slide'));
-  const dotsDesktop = Array.from(modal.querySelectorAll('#mediaDots .dot'));
-  const dotsMobile = Array.from(
-    modal.querySelectorAll('#mediaDotsMobile .dot')
-  );
-  const prevDesktop = modal.querySelector('#mdPrev');
-  const nextDesktop = modal.querySelector('#mdNext');
-  const prevMobile = modal.querySelector('#mdPrevMobile');
-  const nextMobile = modal.querySelector('#mdNextMobile');
-
-  let idx = 0;
-
-  function setSlide(i) {
-    idx = (i + slides.length) % slides.length;
-    slides.forEach((s, k) => s.classList.toggle('is-active', k === idx));
-    [...dotsDesktop, ...dotsMobile].forEach((d, k) =>
-      d.classList.toggle('is-active', k === idx)
-    );
-  }
-
-  // --- події ---
-  [prevDesktop, prevMobile].forEach((btn) =>
-    btn?.addEventListener('click', () => setSlide(idx - 1))
-  );
-  [nextDesktop, nextMobile].forEach((btn) =>
-    btn?.addEventListener('click', () => setSlide(idx + 1))
-  );
-
-  [...dotsDesktop, ...dotsMobile].forEach((d, k) =>
-    d.addEventListener('click', () => setSlide(k))
-  );
-})();
+    e.addEventListener('click', s);
+  })(),
+  (() => {
+    let e = document.getElementById('servicesBtn'),
+      t = document.getElementById('servicesMenu'),
+      s = document.getElementById('servicesInner'),
+      i = () => t.querySelector('.services-scrollbar'),
+      n = () => document.getElementById('svcSbActive');
+    function c() {
+      let e = i();
+      if (!e) return;
+      let t = n();
+      if (!t) return;
+      let c = e.clientHeight,
+        l = s.clientHeight,
+        a = s.scrollHeight,
+        r = Math.max(24, Math.round((l / a) * c)),
+        o = Math.round((s.scrollTop / Math.max(a - l, 1)) * (c - r));
+      e.style.setProperty('--svc-h', r + 'px'),
+        e.style.setProperty('--svc-top', o + 'px');
+    }
+    function l() {
+      t.classList.contains('is-open') ||
+        (t.classList.add('is-open'),
+        e.classList.add('is-open'),
+        e.setAttribute('aria-expanded', 'true'),
+        requestAnimationFrame(c));
+    }
+    function a() {
+      t.classList.contains('is-open') &&
+        (t.classList.remove('is-open'),
+        e.classList.remove('is-open'),
+        e.setAttribute('aria-expanded', 'false'));
+    }
+    e.addEventListener('click', (e) => {
+      e.stopPropagation(), t.classList.contains('is-open') ? a() : l();
+    }),
+      document.addEventListener('click', (s) => {
+        t.contains(s.target) || e.contains(s.target) || a();
+      }),
+      s.addEventListener('scroll', c, { passive: !0 }),
+      window.addEventListener('resize', c),
+      t.addEventListener('click', (e) => {
+        let t = e.target.closest('[data-toggle]');
+        if (t) {
+          t.closest('.services-item').classList.toggle('is-open'),
+            requestAnimationFrame(c);
+          return;
+        }
+        let s = e.target.closest('.service-opt');
+        if (s) {
+          s.classList.toggle('is-checked');
+          let i = s.querySelector('input');
+          i && (i.checked = s.classList.contains('is-checked'));
+        }
+      }),
+      new MutationObserver(() => requestAnimationFrame(c)).observe(s, {
+        subtree: !0,
+        childList: !0,
+      });
+  })(),
+  (() => {
+    let e = document.getElementById('locationBtn'),
+      t = document.getElementById('locationMenu'),
+      s = t?.querySelector('.location-input');
+    function i() {
+      !t.classList.contains('is-open') &&
+        (t.classList.add('is-open'),
+        e.classList.add('is-open'),
+        e.setAttribute('aria-expanded', 'true'),
+        s && setTimeout(() => s.focus(), 0));
+    }
+    function n() {
+      t.classList.contains('is-open') &&
+        (t.classList.remove('is-open'),
+        e.classList.remove('is-open'),
+        e.setAttribute('aria-expanded', 'false'));
+    }
+    e &&
+      t &&
+      (e.addEventListener('click', (e) => {
+        e.stopPropagation(), t.classList.contains('is-open') ? n() : i();
+      }),
+      t.addEventListener('click', (e) => e.stopPropagation()),
+      document.addEventListener('click', (s) => {
+        t.contains(s.target) || e.contains(s.target) || n();
+      }));
+  })(),
+  (() => {
+    let e = document.getElementById('projectModal');
+    if (!e) return;
+    let t = e.querySelector('.project-modal__dialog'),
+      s = e.querySelectorAll('[data-close]'),
+      i = document.querySelectorAll('.project__link');
+    function n(e) {
+      document.documentElement.style.overflow = e ? 'hidden' : '';
+    }
+    function c(t) {
+      t && t.preventDefault(),
+        e.classList.add('is-open'),
+        e.setAttribute('aria-hidden', 'false'),
+        n(!0);
+    }
+    function l() {
+      e.classList.remove('is-open'),
+        e.setAttribute('aria-hidden', 'true'),
+        n(!1);
+    }
+    i.forEach((e) => e.addEventListener('click', c)),
+      s.forEach((e) => e.addEventListener('click', l)),
+      e.addEventListener('click', (e) => {
+        t.contains(e.target) || l();
+      }),
+      window.addEventListener('keydown', (e) => {
+        'Escape' === e.key && l();
+      });
+    let a = Array.from(e.querySelectorAll('.media-slide')),
+      r = Array.from(e.querySelectorAll('.media-pagination .dot')),
+      o = e.querySelector('#mdPrev'),
+      d = e.querySelector('#mdNext'),
+      u = 0;
+    function p(e) {
+      (u = (e + a.length) % a.length),
+        a.forEach((e, t) => e.classList.toggle('is-active', t === u)),
+        r.forEach((e, t) => e.classList.toggle('is-active', t === u));
+    }
+    o.addEventListener('click', () => p(u - 1)),
+      d.addEventListener('click', () => p(u + 1)),
+      r.forEach((e, t) => e.addEventListener('click', () => p(t)));
+  })(),
+  (() => {
+    let e = document.getElementById('mediaBtn'),
+      t = document.getElementById('asideScroll');
+    function s() {
+      e.classList.add('is-open'),
+        e.setAttribute('aria-expanded', 'true'),
+        t.classList.add('is-open');
+    }
+    function i() {
+      e.classList.remove('is-open'),
+        e.setAttribute('aria-expanded', 'false'),
+        t.classList.remove('is-open');
+    }
+    e &&
+      t &&
+      (e.addEventListener('click', (t) => {
+        t.stopPropagation(), e.classList.contains('is-open') ? i() : s();
+      }),
+      document.addEventListener('click', (s) => {
+        e.contains(s.target) || t.contains(s.target) || i();
+      }));
+  })(),
+  (() => {
+    let e = document.getElementById('projectModal');
+    if (!e) return;
+    let t = e.querySelector('.project-modal__dialog'),
+      s = e.querySelectorAll('[data-close]'),
+      i = document.querySelectorAll('.project__link');
+    function n(e) {
+      document.documentElement.style.overflow = e ? 'hidden' : '';
+    }
+    function c(t) {
+      t && t.preventDefault(),
+        e.classList.add('is-open'),
+        e.setAttribute('aria-hidden', 'false'),
+        n(!0);
+    }
+    function l() {
+      e.classList.remove('is-open'),
+        e.setAttribute('aria-hidden', 'true'),
+        n(!1);
+    }
+    i.forEach((e) => e.addEventListener('click', c)),
+      s.forEach((e) => e.addEventListener('click', l)),
+      e.addEventListener('click', (e) => {
+        t.contains(e.target) || l();
+      }),
+      window.addEventListener('keydown', (e) => {
+        'Escape' === e.key && l();
+      });
+    let a = Array.from(e.querySelectorAll('.media-slide')),
+      r = Array.from(e.querySelectorAll('#mediaDots .dot')),
+      o = Array.from(e.querySelectorAll('#mediaDotsMobile .dot')),
+      d = e.querySelector('#mdPrev'),
+      u = e.querySelector('#mdNext'),
+      p = e.querySelector('#mdPrevMobile'),
+      v = e.querySelector('#mdNextMobile'),
+      L = 0;
+    function E(e) {
+      (L = (e + a.length) % a.length),
+        a.forEach((e, t) => e.classList.toggle('is-active', t === L)),
+        [...r, ...o].forEach((e, t) =>
+          e.classList.toggle('is-active', t === L)
+        );
+    }
+    [d, p].forEach((e) => e?.addEventListener('click', () => E(L - 1))),
+      [u, v].forEach((e) => e?.addEventListener('click', () => E(L + 1))),
+      [...r, ...o].forEach((e, t) => e.addEventListener('click', () => E(t)));
+  })();

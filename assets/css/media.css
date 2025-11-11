@@ -1,47 +1,47 @@
-/* ===== Mobile (phones) ===== */
 @media (max-width: 480px) {
-  /* Base spacing */
+  .section-map__head > :not(.section-map__title):not(.segmented),
+  .section-map__wrapp > :not(.section-map__aside):not(.section-map__frame) {
+    display: none !important;
+  }
   .section-map .container {
     padding: 12px !important;
   }
-  /* Вертикальний відступ для всіх прямих дітей контейнера */
   .section-map .container > * {
     margin-top: 12px !important;
     margin-bottom: 12px !important;
   }
-  .section-map .container > *:first-child {
+  .section-map .container > :first-child {
     margin-top: 0 !important;
   }
-  .section-map .container > *:last-child {
+  .section-map .container > :last-child {
     margin-bottom: 0 !important;
   }
-  .segmented {
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  /* Усередині колонки теж 12px між елементами */
   .section-map__wrapp {
     gap: 12px !important;
   }
   .section-map__wrapp > * {
-    margin: 0 !important; /* відступ дає gap, зайве прибираємо */
+    margin: 0 !important;
   }
   .section-map__head {
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
-  .section-map__head > *:not(.section-map__title):not(.segmented) {
-    display: none !important;
-  }
   .section-map__title {
     font-size: 28px;
     line-height: 1.2;
     letter-spacing: -0.01em;
   }
+  .aside__refresh,
+  .chip,
+  .location-input,
+  .project__link,
+  .project__title {
+    font-size: 14px;
+  }
   .segmented {
-    width: 100%;
+    width: 100% !important;
+    box-sizing: border-box !important;
     height: 48px;
     margin-left: 12px;
   }
@@ -52,7 +52,6 @@
   .segmented__btn-text {
     height: 20px;
   }
-
   .section-map__cities {
     display: none;
   }
@@ -61,26 +60,18 @@
   }
   .chip {
     padding: 8px 10px;
-    font-size: 14px;
   }
-
   .section-map__wrapp {
-    display: flex !important; /* перекриває grid/інші значення */
+    display: flex !important;
     flex-direction: column;
     gap: 16px;
     width: 100%;
   }
-  .section-map__wrapp > *:not(.section-map__aside):not(.section-map__frame) {
-    display: none !important;
+  .action-btn--menu,
+  .aside__actions .action-btn .ico--primary,
+  .aside__actions .action-btn.is-open .ico--primary {
+    display: inline-flex !important;
   }
-
-  /* Map frame: give explicit height on phones */
-  .section-map__frame {
-    max-height: 565px;
-    border-radius: 8px;
-  }
-
-  /* Aside container */
   .section-map__aside {
     order: 1;
     width: 100%;
@@ -89,14 +80,14 @@
     background: var(--aside-bg, #262626);
   }
   .section-map__frame {
+    max-height: 565px;
+    border-radius: 8px;
     order: 2;
     width: 100%;
   }
-
   .aside__inner {
     gap: 12px;
   }
-
   .aside__top {
     padding: 0 12px;
   }
@@ -104,11 +95,6 @@
     width: 18px;
     height: 18px;
   }
-  .aside__refresh {
-    font-size: 14px;
-  }
-
-  /* Promo image toggle */
   .aside__promo {
     margin: 10px 12px 12px;
   }
@@ -116,43 +102,25 @@
     width: 100%;
     height: auto;
   }
-
-  /* Action buttons row */
   .aside__actions {
     position: relative;
     overflow: visible;
     z-index: 20;
   }
-  .aside__actions .action-btn {
-    display: inline-flex;
-    min-width: 44px;
-    height: 44px;
-    padding: 10px;
-    border-radius: 12px;
-    justify-content: center;
-    align-items: center;
-    gap: 0;
+  .services-menu,
+  .services-scrollbar {
+    position: absolute;
+    pointer-events: none;
+    background: #262626;
   }
+  .aside__actions .action-btn.is-open .ico--close,
   .aside__actions .action-btn > span:not(.ico) {
-    display: none !important;
-  }
-  .aside__actions .action-btn .ico--primary {
-    display: inline-flex !important;
-  }
-  .aside__actions .action-btn .ico--close {
-    display: none !important;
-  }
-  .aside__actions .action-btn.is-open .ico--primary {
-    display: inline-flex !important;
-  }
-  .aside__actions .action-btn.is-open .ico--close {
     display: none !important;
   }
   .aside__actions .action-btn .ico svg {
     width: 20px;
     height: 20px;
   }
-
   .aside__cta,
   .cta-btn {
     width: 100%;
@@ -160,84 +128,37 @@
     box-sizing: border-box;
     margin: 0;
   }
-  .action-btn--menu {
-    display: inline-flex !important;
-  }
-  /* Project list */
-
-  .aside__list {
-    width: 100%;
-    max-height: 340px;
-    padding-right: 0;
-  }
-  .project {
-    gap: 6px;
-    margin-bottom: 12px;
-  }
-  .project__img {
-    height: 160px;
-    border-radius: 10px;
-  }
-  .project__title {
-    font-size: 14px;
-    line-height: 20px;
-  }
-  .project__link {
-    font-size: 14px;
-  }
-  .scrollbar {
-    height: 100%;
-    box-sizing: border-box;
-  }
   .services-menu {
-    position: absolute;
     top: calc(100% + 8px);
     left: 12px;
     right: 12px;
     max-width: calc(100vw - 24px);
-    /* висота під екран */
     height: auto;
-
     padding-top: 12px;
     padding-left: 12px;
     padding-right: 12px;
-
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px solid #505050;
-    background: #262626;
-
-    /* приховано за замовчуванням */
     display: none;
-    pointer-events: none;
     z-index: 2500;
-
-    /* плавна поява */
     opacity: 0;
     transform: translateY(-6px);
-    transition: opacity 0.18s ease, transform 0.18s ease,
-      visibility 0s linear 0.18s;
+    transition: opacity 0.18s, transform 0.18s, visibility 0s linear 0.18s;
     visibility: hidden;
-
-    /* внутрішній контейнер скролиться; саме меню — ні */
     overflow: hidden;
   }
-
-  /* ВІДКРИТО: показуємо і дозволяємо взаємодію */
   .services-menu.is-open {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 10px;
-
     pointer-events: auto;
     opacity: 1;
     transform: translateY(0);
-    transition: opacity 0.18s ease, transform 0.18s ease;
+    transition: opacity 0.18s, transform 0.18s;
     visibility: visible;
   }
-
-  /* Внутрішній скрол-контент: тільки він скролиться */
   .services-menu__inner {
     height: 100%;
     width: 100%;
@@ -249,8 +170,7 @@
     width: 0;
     height: 0;
   }
-
-  /* Елементи списку — на всю ширину */
+  .location-menu__row,
   .services-item {
     width: 100%;
   }
@@ -261,21 +181,15 @@
     width: calc(100% - 24px);
     margin: 10px 12px;
   }
-
-  /* Статичний трек кастомного скролу усередині меню */
   .services-scrollbar {
-    position: absolute;
     top: 12px;
     right: 6px;
     width: 6px;
     height: calc(100% - 24px);
-
     display: flex;
     align-items: flex-start;
     border-radius: 5px;
     border: 1px solid #505050;
-    background: #262626;
-    pointer-events: none;
     z-index: 1;
   }
   .services-scrollbar__active {
@@ -283,8 +197,6 @@
     border-radius: 5px;
     background: #2e7bb2;
   }
-
-  /* Кнопки в ряду: лише основна іконка на мобільних */
   .aside__actions .action-btn {
     display: inline-flex;
     min-width: 44px;
@@ -295,17 +207,11 @@
     align-items: center;
     gap: 0;
   }
-  .aside__actions .action-btn > span:not(.ico) {
+  .aside__actions .action-btn .ico--close,
+  .project-modal__media .media-nav,
+  .project-modal__media [data-overlay-nav] {
     display: none !important;
   }
-  .aside__actions .action-btn .ico--primary {
-    display: inline-flex !important;
-  }
-  .aside__actions .action-btn .ico--close {
-    display: none !important;
-  }
-
-  /* Список проєктів та трек основної колонки — без змін у поведінці */
   .aside__list {
     width: 100%;
     max-height: 340px;
@@ -320,44 +226,31 @@
     border-radius: 10px;
   }
   .project__title {
-    font-size: 14px;
     line-height: 20px;
-  }
-  .project__link {
-    font-size: 14px;
   }
   .scrollbar {
     height: 100%;
     box-sizing: border-box;
   }
-
-  /* Забезпечити, що батьківські блоки не обрізають дропдаун */
   .section-map__aside {
     overflow: visible;
     z-index: 1;
   }
-
   @media (max-width: 480px) {
     .section-map__wrapp > .aside__scrollwrap {
       display: block !important;
     }
   }
-  /* === Location search (dropdown) === */
   .location-menu {
     left: 12px;
     right: 12px;
     max-width: none;
-
     max-width: calc(100vw - 24px);
     max-height: none;
     border-radius: 10px;
   }
-  .location-menu__row {
-    width: 100%;
-  }
   .location-input {
     width: 100%;
-    font-size: 14px;
     line-height: 22px;
     padding: 10px;
   }
@@ -375,8 +268,6 @@
     position: relative !important;
     box-sizing: border-box !important;
   }
-
-  /* Close — top-right */
   .project-modal__close {
     position: absolute !important;
     top: 8px !important;
@@ -387,10 +278,7 @@
     place-items: center !important;
     z-index: 3 !important;
   }
-
-  /* Media block */
   .media-wrapper {
-    /* container of the image/slider */
     position: relative !important;
     width: 100% !important;
   }
@@ -402,8 +290,6 @@
     object-fit: cover !important;
     border-radius: 12px !important;
   }
-
-  /* Top badges — three in a row on the image */
   .media-badges {
     position: absolute !important;
     top: 10px !important;
@@ -413,7 +299,7 @@
     align-items: center !important;
     gap: 8px !important;
     z-index: 2 !important;
-    pointer-events: none; /* badges are informational */
+    pointer-events: none;
   }
   .media-badges .badge {
     display: inline-flex !important;
@@ -427,8 +313,6 @@
     white-space: nowrap !important;
     pointer-events: auto;
   }
-
-  /* Slider controls row: prev — dots — next */
   .media-controls {
     margin-top: 10px !important;
     display: flex !important;
@@ -437,7 +321,6 @@
     gap: 10px !important;
   }
   .media-controls .nav-btn {
-    /* #mdPrev / #mdNext */
     width: 40px !important;
     height: 40px !important;
     border-radius: 10px !important;
@@ -463,15 +346,12 @@
   .media-pagination .dot.is-active {
     background: #fbfbfb !important;
   }
-
-  /* Title */
   .project-modal__title {
     margin-top: 12px !important;
     color: #fbfbfb !important;
     font: 500 22px/28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial !important;
     letter-spacing: 0.01em !important;
   }
-  /* Centered rating */
   .rating-block {
     margin: 16px auto 0 !important;
     display: flex !important;
@@ -507,21 +387,13 @@
     width: 14px !important;
     height: 14px !important;
   }
-  .project-modal__media .media-nav,
-  .project-modal__media [data-overlay-nav] {
-    display: none !important;
-  }
-
-  /* Контейнер під зображенням: стрілка — точки — стрілка */
   .project-modal__media .media-controls[data-mobile] {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-top: 10px; /* невеликий відступ від зображення */
+    margin-top: 10px;
   }
-
-  /* Кнопки навігації */
   .project-modal__media .media-controls[data-mobile] .nav-btn {
     display: inline-flex;
     justify-content: center;
@@ -533,8 +405,6 @@
     border: 2px solid #505050;
     flex: 0 0 44px;
   }
-
-  /* Пагінація по центру */
   .project-modal__media .media-controls[data-mobile] .media-pagination {
     display: flex;
     align-items: center;
@@ -543,8 +413,6 @@
     flex: 1 1 auto;
     min-width: 0;
   }
-
-  /* Точки пагінації */
   .project-modal__media .media-controls[data-mobile] .media-pagination .dot {
     width: 12px;
     height: 12px;
@@ -552,7 +420,6 @@
     background: #fbfbfb;
     opacity: 0.5;
   }
-
   .project-modal__media
     .media-controls[data-mobile]
     .media-pagination
@@ -569,7 +436,7 @@
   .modal-title {
     width: 100%;
     box-sizing: border-box;
-    font: 500 24px / 120% Inter, system-ui, sans-serif;
+    font: 500 24px/120% Inter, system-ui, sans-serif;
   }
   .details-row {
     display: flex;
@@ -577,10 +444,10 @@
     align-items: flex-start;
     flex-direction: column;
   }
-  .project-modal__media .modal-media,
+  .project-modal__media .media,
   .project-modal__media .media-frame,
-  .project-modal__media .media {
-    height: 240px; /* за потреби підкоригуй під свій макет */
+  .project-modal__media .modal-media {
+    height: 240px;
     border-radius: 12px;
     overflow: hidden;
   }
@@ -593,25 +460,15 @@
     display: none !important;
   }
 }
-/* Мобільний ряд за замовчуванням приховано */
 .mobile-controls {
   display: none;
 }
-
-/* --- адаптація під мобільні --- */
 @media (max-width: 768px) {
-  /* Ховаємо бокові стрілки біля зображення */
-  .modal-media-row .media-nav--prev,
-  .modal-media-row .media-nav--next {
+  .desktop-only,
+  .modal-media-row .media-nav--next,
+  .modal-media-row .media-nav--prev {
     display: none !important;
   }
-
-  /* Ховаємо десктопну пагінацію */
-  .desktop-only {
-    display: none !important;
-  }
-
-  /* Нижній ряд активний */
   .mobile-controls {
     display: flex !important;
     align-items: center !important;
@@ -620,7 +477,6 @@
     margin-top: 16px !important;
     width: 100% !important;
   }
-
   .mobile-controls .media-nav {
     width: 44px !important;
     height: 44px !important;
@@ -630,8 +486,6 @@
     display: grid !important;
     place-items: center !important;
   }
-
-  /* Пагінація по центру між стрілками */
   .mobile-controls .media-pagination {
     flex: 1 1 auto !important;
     display: flex !important;
@@ -639,15 +493,13 @@
     align-items: center !important;
     gap: 8px !important;
   }
-
   .mobile-controls .media-pagination .dot {
     width: 10px !important;
     height: 10px !important;
     border-radius: 50% !important;
     background: rgba(251, 251, 251, 0.5) !important;
-    transition: opacity 0.2s ease !important;
+    transition: opacity 0.2s !important;
   }
-
   .mobile-controls .media-pagination .dot.is-active {
     background: #fbfbfb !important;
     opacity: 1 !important;
