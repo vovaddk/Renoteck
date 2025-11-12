@@ -600,7 +600,7 @@
 .modal-media {
   position: relative;
   width: 928px;
-  height: 450px;
+  height: 100%;
   border-radius: 12px;
   overflow: hidden;
   background: #111;
