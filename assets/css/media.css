@@ -136,7 +136,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1300px) {
   .project-modal__dialog {
     width: 100vw !important;
     max-width: 100% !important;
@@ -709,7 +709,6 @@
     opacity: 1 !important;
   }
 }
-/* === MODAL (mobile) — фікс висоти слайдера + відступ зверху === */
 @media (max-width: 480px) {
   /* верхній відступ всередині діалогу */
   .project-modal__dialog {
