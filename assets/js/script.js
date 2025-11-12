@@ -87,27 +87,26 @@ function closeActions(exceptBtnSelector) {
   });
 }
 
-/* ========= Services menu ========= */
+/* ========= Services menu (fixed scope) ========= */
 (() => {
   const btn = $('#servicesBtn');
   const menu = $('#servicesMenu');
-  const inner = $('#servicesInner'); // scrollable container inside menu
-  const sbHost = () => menu?.querySelector('.services-scrollbar'); // track
+  const inner = $('#servicesInner'); // scrollable area
+  const track = () => menu?.querySelector('.services-scrollbar'); // custom track
   if (!btn || !menu || !inner) return;
 
   const updateScrollbar = () => {
-    const track = sbHost();
-    if (!track) return;
-
-    const cH = track.clientHeight;
+    const t = track();
+    if (!t) return;
+    const cH = t.clientHeight;
     const vH = inner.clientHeight;
     const sH = inner.scrollHeight;
     const thumbH = Math.max(24, Math.round((vH / sH) * cH));
     const top = Math.round(
       (inner.scrollTop / Math.max(sH - vH, 1)) * (cH - thumbH)
     );
-    track.style.setProperty('--svc-h', thumbH + 'px');
-    track.style.setProperty('--svc-top', top + 'px');
+    t.style.setProperty('--svc-h', thumbH + 'px');
+    t.style.setProperty('--svc-top', top + 'px');
   };
 
   const open = () => {
@@ -126,33 +125,59 @@ function closeActions(exceptBtnSelector) {
     btn.setAttribute('aria-expanded', 'false');
   };
 
-  // Toggle from button
   btn.addEventListener('click', (ev) => {
     ev.stopPropagation();
     menu.classList.contains('is-open') ? close() : open();
   });
 
-  // Click outside to close
   document.addEventListener('click', (ev) => {
     if (menu.contains(ev.target) || btn.contains(ev.target)) return;
     close();
   });
 
-  // Inner scroll + resize
   inner.addEventListener('scroll', updateScrollbar, { passive: true });
   window.addEventListener('resize', updateScrollbar);
 
-  // Expand/collapse service groups via [data-toggle]
+  const primeHeads = () => {
+    $$('.services-item__head', menu).forEach((h) => {
+      h.setAttribute('role', 'button');
+      h.setAttribute('tabindex', '0');
+      const item = h.closest('.services-item');
+      const expanded = item?.classList.contains('is-open');
+      h.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
+  };
+  primeHeads();
+
   menu.addEventListener('click', (ev) => {
-    const toggle = ev.target.closest('[data-toggle]');
-    if (toggle) {
-      const item = toggle.closest('.services-item');
+    // Клік по всій шапці відкриває/закриває
+    const head = ev.target.closest('.services-item__head');
+    if (head) {
+      const item = head.closest('.services-item');
+      if (item) {
+        item.classList.toggle('is-open');
+        head.setAttribute('aria-expanded', item.classList.contains('is-open'));
+        requestAnimationFrame(updateScrollbar);
+      }
+      return;
+    }
+
+    // Старий тригер по стрілці теж лишається
+    const tg = ev.target.closest('[data-toggle]');
+    if (tg) {
+      const item = tg.closest('.services-item');
+      const headEl = item?.querySelector('.services-item__head');
       if (item) item.classList.toggle('is-open');
+      if (headEl)
+        headEl.setAttribute(
+          'aria-expanded',
+          item.classList.contains('is-open')
+        );
       requestAnimationFrame(updateScrollbar);
       return;
     }
 
-    // Row click: toggle input if click wasn't on input itself
+    // Клік по опції
     const row = ev.target.closest('.service-opt');
     if (row) {
       const input = row.querySelector('input');
@@ -162,37 +187,21 @@ function closeActions(exceptBtnSelector) {
     }
   });
 
-  // Ensure input change keeps class in sync (covers keyboard/assistive tech)
-  const primeInputs = (root = menu) => {
-    $$('.service-opt input', root).forEach((ck) => {
-      const label = ck.closest('.service-opt');
-      if (label) label.classList.toggle('is-checked', ck.checked);
+  menu.addEventListener('keydown', (ev) => {
+    const head = ev.target.closest('.services-item__head');
+    if (!head) return;
+    if (ev.key === 'Enter' || ev.key === ' ') {
+      ev.preventDefault();
+      head.click();
+    }
+  });
 
-      // Avoid duplicate listeners
-      ck.removeEventListener('__sync', ck.__syncHandler || (() => {}));
-
-      ck.__syncHandler = function __sync(e) {
-        const lbl = e.target.closest('.service-opt');
-        if (lbl) lbl.classList.toggle('is-checked', e.target.checked);
-      };
-      ck.addEventListener('change', ck.__syncHandler, {
-        passive: true,
-        once: false,
-      });
-      // Marker to allow removal if needed
-      ck.addEventListener('__sync', () => {});
-    });
-  };
-
-  primeInputs();
-
-  // Observe dynamic changes inside inner container
   new MutationObserver(() => {
     requestAnimationFrame(() => {
-      primeInputs();
+      primeHeads();
       updateScrollbar();
     });
-  }).observe(inner, { subtree: true, childList: true });
+  }).observe(menu, { subtree: true, childList: true });
 })();
 
 /* ========= Location menu ========= */

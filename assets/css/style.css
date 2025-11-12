@@ -399,6 +399,7 @@
   width: 283px;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
 }
 .services-item__title {
   color: #fff;
