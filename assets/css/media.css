@@ -1,3 +1,225 @@
+/* =========================
+   ADAPTIVE: ≤1300 → phones
+   Paste at END of media.css
+   ========================= */
+
+/* ≤1300px — компактні відступи, зменшення типографіки */
+@media (max-width: 1300px) {
+  .section-map .container {
+    padding: 24px !important;
+  }
+  .section-map__wrapp {
+    gap: 24px !important;
+  }
+  .modal-title {
+    font-size: clamp(22px, 2.2vw, 28px) !important;
+    line-height: 1.2 !important;
+  }
+  .details-row {
+    gap: 24px !important;
+  }
+}
+
+/* ≤1100px — стиснення медіаблоку, кнопок навігації */
+@media (max-width: 1100px) {
+  .modal-media {
+    height: min(50vh, 420px) !important;
+    border-radius: 12px !important;
+  }
+  .modal-media-row .media-nav {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 12px !important;
+  }
+  #mediaSwiper,
+  #mediaSwiper .swiper-wrapper,
+  #mediaSwiper .swiper-slide {
+    height: 100% !important;
+  }
+  #mediaSwiper .swiper-slide img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+}
+
+/* ≤1024px — колонки в стовпці, шапка модалки стає вертикальною */
+@media (max-width: 1024px) {
+  .section-map__wrapp {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+  .section-map__frame {
+    order: 1 !important;
+    width: 100% !important;
+  }
+  .section-map__aside {
+    order: 2 !important;
+    width: 100% !important;
+  }
+  .modal-head {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .details-row {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+}
+
+/* ≤900px — дрібні типо-підстроювання */
+@media (max-width: 900px) {
+  .modal-title {
+    font-size: 24px !important;
+  }
+  .project__img {
+    height: 200px !important;
+  }
+}
+
+/* ≤768px — моб. керування слайдером, теги поверх, висота слайдера */
+@media (max-width: 768px) {
+  .modal-media {
+    height: 260px !important;
+  }
+
+  /* теги поверх зображення */
+  #mediaSwiper {
+    position: relative !important;
+  }
+  #mediaSwiper .media-tags {
+    position: absolute !important;
+    top: 12px !important;
+    z-index: 10 !important;
+    display: flex !important;
+    gap: 8px !important;
+    pointer-events: none !important;
+  }
+  #mediaSwiper .media-tags--left {
+    left: 12px !important;
+  }
+  #mediaSwiper .media-tags--right {
+    right: 12px !important;
+  }
+
+  /* вимкнути десктопні стрілки, увімкнути мобільні */
+  .modal-media-row .media-nav--prev,
+  .modal-media-row .media-nav--next {
+    display: none !important;
+  }
+  .mobile-controls {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 24px !important;
+    margin-top: 12px !important;
+  }
+  .mobile-controls .media-nav {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 12px !important;
+    border: 1px solid #505050 !important;
+    background: #262626 !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  /* пагінація між стрілками */
+  .mobile-controls .media-pagination {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+  .mobile-controls .media-pagination .swiper-pagination-bullet {
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50% !important;
+    background: rgba(251, 251, 251, 0.5) !important;
+  }
+  .mobile-controls .media-pagination .swiper-pagination-bullet-active {
+    background: #fff !important;
+  }
+}
+
+/* ≤600px — більш щільний діалог */
+@media (max-width: 600px) {
+  .project-modal__dialog {
+    width: 100vw !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 12px !important;
+    border-radius: 12px !important;
+  }
+  .modal-media {
+    height: 240px !important;
+  }
+}
+
+/* ≤480px — відступ зверху в модалці, підстрахування пагінації */
+@media (max-width: 480px) {
+  .project-modal__dialog {
+    padding-top: 56px !important;
+  }
+  .modal-media-row {
+    margin-top: 16px !important;
+  }
+
+  /* крапки пагінації (якщо показуються поверх зображення) */
+  #mediaSwiper .media-pagination {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    bottom: 12px !important;
+    z-index: 2 !important;
+  }
+  .media-pagination .swiper-pagination-bullet {
+    width: 12px !important;
+    height: 12px !important;
+    border-radius: 50% !important;
+    background: #bdbdbd !important;
+    opacity: 1 !important;
+    margin: 0 !important;
+  }
+  .media-pagination .swiper-pagination-bullet-active {
+    background: #fff !important;
+  }
+}
+/* Put at the very end of media.css */
+
+/* ≤1024px: карта завжди останньою, порядок не змінюємо на ширших */
+@media (max-width: 1024px) {
+  /* перший іде контент/aside */
+  .section-map__aside {
+    order: 1 !important;
+  }
+
+  /* другим (внизу) іде карта */
+  .section-map__frame,
+  .section-map__map,
+  .section-map .map,
+  .section-map [data-role='map'] {
+    order: 2 !important;
+  }
+}
+
+/* дублюємо на мобільних, щоб перекрити можливі правила нижче */
+@media (max-width: 768px) {
+  .section-map__aside {
+    order: 1 !important;
+  }
+  .section-map__frame,
+  .section-map__map,
+  .section-map .map,
+  .section-map [data-role='map'] {
+    order: 2 !important;
+  }
+}
+
 @media (max-width: 480px) {
   .section-map__head > :not(.section-map__title):not(.segmented),
   .section-map__wrapp > :not(.section-map__aside):not(.section-map__frame) {
@@ -260,13 +482,14 @@
     padding: 10px;
   }
   .project-modal__dialog {
-    width: 100vw !important;
-    max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 12px !important;
-    border-radius: 12px !important;
-    position: relative !important;
-    box-sizing: border-box !important;
+    width: 100vw;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 12px;
+    border-radius: 12px;
+    position: relative;
+    box-sizing: border-box;
+    max-height: 100dvh !important;
   }
   .project-modal__close {
     position: absolute !important;
@@ -331,11 +554,7 @@
     flex: 0 0 40px !important;
   }
   .media-pagination {
-    flex: 1 1 auto !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
+    display: none;
   }
   .media-pagination .dot {
     width: 12px !important;
@@ -451,9 +670,6 @@
     border-radius: 12px;
     overflow: hidden;
   }
-  .modal-media-row {
-    padding-top: 50px;
-  }
 }
 @media (min-width: 481px) {
   .action-btn--menu {
@@ -503,5 +719,56 @@
   .mobile-controls .media-pagination .dot.is-active {
     background: #fbfbfb !important;
     opacity: 1 !important;
+  }
+}
+/* === MODAL (mobile) — фікс висоти слайдера + відступ зверху === */
+@media (max-width: 480px) {
+  /* верхній відступ всередині діалогу */
+  .project-modal__dialog {
+    padding-top: 56px !important; /* можна 48–64 */
+  }
+
+  /* невеликий відступ над медіаблоком */
+  .modal-media-row {
+    margin-top: 65% !important;
+  }
+
+  /* фіксована висота медіа на мобільних */
+  .modal-media {
+    height: 260px !important; /* за потреби 240/280 */
+  }
+
+  /* СЛАЙДЕР МАЄ ЗАЙМАТИ ВСЮ ВИСОТУ КОНТЕЙНЕРА */
+  #mediaSwiper,
+  #mediaSwiper .swiper-wrapper,
+  #mediaSwiper .swiper-slide {
+    height: 100% !important;
+  }
+
+  #mediaSwiper .swiper-slide img,
+  .modal-media .swiper-slide img,
+  #mediaSwiper .swiper-slide img,
+  .modal-media img {
+    width: 100% !important;
+    height: 100% !important; /* ключ: не auto */
+    max-height: 312px !important;
+    object-fit: cover !important; /* заповнює блок без “стрибків” */
+    display: block !important;
+  }
+
+  /* теги поверх зображення — увімкнено на телефонах */
+  #mediaSwiper .media-tags {
+    position: absolute !important;
+    top: 12px !important;
+    z-index: 10 !important;
+    display: flex !important;
+    gap: 8px !important;
+    pointer-events: none !important;
+  }
+  #mediaSwiper .media-tags--left {
+    left: 12px !important;
+  }
+  #mediaSwiper .media-tags--right {
+    right: 12px !important;
   }
 }

@@ -1,236 +1,371 @@
-document.querySelectorAll('.chip').forEach((e) => {
-  e.addEventListener('click', () => {
-    document
-      .querySelectorAll('.chip')
-      .forEach((e) => e.classList.remove('active')),
-      e.classList.add('active');
-  });
-}),
-  document.querySelectorAll('.segmented__btn').forEach((e) => {
-    e.addEventListener('click', () => {
-      document
-        .querySelectorAll('.segmented__btn')
-        .forEach((e) => e.classList.remove('is-active')),
-        e.classList.add('is-active');
+/* ========= Helpers ========= */
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+/* ========= Chips ========= */
+(() => {
+  const chips = $$('.chip');
+  if (!chips.length) return;
+  chips.forEach((ch) => {
+    ch.addEventListener('click', () => {
+      chips.forEach((c) => c.classList.remove('active'));
+      ch.classList.add('active');
     });
-  }),
-  (() => {
-    let e = document.getElementById('projects'),
-      t = document.getElementById('sbActive');
-    function s() {
-      let s = e.clientHeight,
-        i = e.scrollHeight,
-        n = Math.max(24, Math.round((s / i) * 371)),
-        c = Math.round((e.scrollTop / Math.max(i - s, 1)) * (371 - n));
-      (t.style.height = n + 'px'), (t.style.marginTop = c + 'px');
+  });
+})();
+
+/* ========= Segmented control ========= */
+(() => {
+  const btns = $$('.segmented__btn');
+  if (!btns.length) return;
+  btns.forEach((b) => {
+    b.addEventListener('click', () => {
+      btns.forEach((x) => x.classList.remove('is-active'));
+      b.classList.add('is-active');
+    });
+  });
+})();
+
+/* ========= Custom scrollbar for #projects ========= */
+(() => {
+  const host = $('#projects');
+  const thumb = $('#sbActive'); // thumb height track is 371px in layout
+  if (!host || !thumb) return;
+
+  const TRACK_H = 371; // match your CSS/markup
+  const MIN_THUMB = 24;
+
+  const update = () => {
+    const viewH = host.clientHeight;
+    const scrollH = host.scrollHeight;
+    const thumbH = Math.max(MIN_THUMB, Math.round((viewH / scrollH) * TRACK_H));
+    const top = Math.round(
+      (host.scrollTop / Math.max(scrollH - viewH, 1)) * (TRACK_H - thumbH)
+    );
+    thumb.style.height = thumbH + 'px';
+    thumb.style.marginTop = top + 'px';
+  };
+
+  host.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+
+/* ========= Aside promo toggle ========= */
+(() => {
+  const btn = $('#asideArrow');
+  const panel = $('#asidePromo');
+  if (!btn || !panel) return;
+
+  const toggle = () => {
+    const willOpen = !btn.classList.contains('is-open');
+    btn.classList.toggle('is-open', willOpen);
+    btn.setAttribute('aria-expanded', String(willOpen));
+    panel.classList.toggle('is-open', willOpen);
+  };
+
+  btn.addEventListener('click', toggle);
+})();
+
+/* ========= Mutually exclusive aside actions ========= */
+const ACTIONS = [
+  { btn: '#servicesBtn', panel: '#servicesMenu' },
+  { btn: '#locationBtn', panel: '#locationMenu' },
+  { btn: '#mediaBtn', panel: '#asideScroll' },
+];
+
+function closeActions(exceptBtnSelector) {
+  ACTIONS.forEach(({ btn, panel }) => {
+    if (btn === exceptBtnSelector) return;
+    const b = $(btn);
+    const p = $(panel);
+    if (b) {
+      b.classList.remove('is-open');
+      b.setAttribute('aria-expanded', 'false');
     }
-    e.addEventListener('scroll', s), window.addEventListener('resize', s), s();
-  })(),
-  (() => {
-    let e = document.getElementById('asideArrow'),
-      t = document.getElementById('asidePromo');
-    function s() {
-      let s = !e.classList.contains('is-open');
-      e.classList.toggle('is-open', s),
-        e.setAttribute('aria-expanded', String(s)),
-        t.classList.toggle('is-open', s);
+    if (p) p.classList.remove('is-open');
+  });
+}
+
+/* ========= Services menu ========= */
+(() => {
+  const btn = $('#servicesBtn');
+  const menu = $('#servicesMenu');
+  const inner = $('#servicesInner'); // scrollable container inside menu
+  const sbHost = () => menu?.querySelector('.services-scrollbar'); // track
+  if (!btn || !menu || !inner) return;
+
+  const updateScrollbar = () => {
+    const track = sbHost();
+    if (!track) return;
+
+    const cH = track.clientHeight;
+    const vH = inner.clientHeight;
+    const sH = inner.scrollHeight;
+    const thumbH = Math.max(24, Math.round((vH / sH) * cH));
+    const top = Math.round(
+      (inner.scrollTop / Math.max(sH - vH, 1)) * (cH - thumbH)
+    );
+    track.style.setProperty('--svc-h', thumbH + 'px');
+    track.style.setProperty('--svc-top', top + 'px');
+  };
+
+  const open = () => {
+    closeActions('#servicesBtn');
+    if (menu.classList.contains('is-open')) return;
+    menu.classList.add('is-open');
+    btn.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+    requestAnimationFrame(updateScrollbar);
+  };
+
+  const close = () => {
+    if (!menu.classList.contains('is-open')) return;
+    menu.classList.remove('is-open');
+    btn.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+  };
+
+  // Toggle from button
+  btn.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    menu.classList.contains('is-open') ? close() : open();
+  });
+
+  // Click outside to close
+  document.addEventListener('click', (ev) => {
+    if (menu.contains(ev.target) || btn.contains(ev.target)) return;
+    close();
+  });
+
+  // Inner scroll + resize
+  inner.addEventListener('scroll', updateScrollbar, { passive: true });
+  window.addEventListener('resize', updateScrollbar);
+
+  // Expand/collapse service groups via [data-toggle]
+  menu.addEventListener('click', (ev) => {
+    const toggle = ev.target.closest('[data-toggle]');
+    if (toggle) {
+      const item = toggle.closest('.services-item');
+      if (item) item.classList.toggle('is-open');
+      requestAnimationFrame(updateScrollbar);
+      return;
     }
-    e.addEventListener('click', s);
-  })(),
-  (() => {
-    let e = document.getElementById('servicesBtn'),
-      t = document.getElementById('servicesMenu'),
-      s = document.getElementById('servicesInner'),
-      i = () => t.querySelector('.services-scrollbar'),
-      n = () => document.getElementById('svcSbActive');
-    function c() {
-      let e = i();
-      if (!e) return;
-      let t = n();
-      if (!t) return;
-      let c = e.clientHeight,
-        l = s.clientHeight,
-        a = s.scrollHeight,
-        r = Math.max(24, Math.round((l / a) * c)),
-        o = Math.round((s.scrollTop / Math.max(a - l, 1)) * (c - r));
-      e.style.setProperty('--svc-h', r + 'px'),
-        e.style.setProperty('--svc-top', o + 'px');
+
+    // Row click: toggle input if click wasn't on input itself
+    const row = ev.target.closest('.service-opt');
+    if (row) {
+      const input = row.querySelector('input');
+      if (!input) return;
+      if (ev.target !== input) input.checked = !input.checked;
+      row.classList.toggle('is-checked', input.checked);
     }
-    function l() {
-      t.classList.contains('is-open') ||
-        (t.classList.add('is-open'),
-        e.classList.add('is-open'),
-        e.setAttribute('aria-expanded', 'true'),
-        requestAnimationFrame(c));
-    }
-    function a() {
-      t.classList.contains('is-open') &&
-        (t.classList.remove('is-open'),
-        e.classList.remove('is-open'),
-        e.setAttribute('aria-expanded', 'false'));
-    }
-    e.addEventListener('click', (e) => {
-      e.stopPropagation(), t.classList.contains('is-open') ? a() : l();
-    }),
-      document.addEventListener('click', (s) => {
-        t.contains(s.target) || e.contains(s.target) || a();
-      }),
-      s.addEventListener('scroll', c, { passive: !0 }),
-      window.addEventListener('resize', c),
-      t.addEventListener('click', (e) => {
-        let t = e.target.closest('[data-toggle]');
-        if (t) {
-          t.closest('.services-item').classList.toggle('is-open'),
-            requestAnimationFrame(c);
-          return;
+  });
+
+  // Ensure input change keeps class in sync (covers keyboard/assistive tech)
+  const primeInputs = (root = menu) => {
+    $$('.service-opt input', root).forEach((ck) => {
+      const label = ck.closest('.service-opt');
+      if (label) label.classList.toggle('is-checked', ck.checked);
+
+      // Avoid duplicate listeners
+      ck.removeEventListener('__sync', ck.__syncHandler || (() => {}));
+
+      ck.__syncHandler = function __sync(e) {
+        const lbl = e.target.closest('.service-opt');
+        if (lbl) lbl.classList.toggle('is-checked', e.target.checked);
+      };
+      ck.addEventListener('change', ck.__syncHandler, {
+        passive: true,
+        once: false,
+      });
+      // Marker to allow removal if needed
+      ck.addEventListener('__sync', () => {});
+    });
+  };
+
+  primeInputs();
+
+  // Observe dynamic changes inside inner container
+  new MutationObserver(() => {
+    requestAnimationFrame(() => {
+      primeInputs();
+      updateScrollbar();
+    });
+  }).observe(inner, { subtree: true, childList: true });
+})();
+
+/* ========= Location menu ========= */
+(() => {
+  const btn = $('#locationBtn');
+  const menu = $('#locationMenu');
+  if (!btn || !menu) return;
+  const input = menu.querySelector('.location-input');
+
+  const open = () => {
+    closeActions('#locationBtn');
+    if (menu.classList.contains('is-open')) return;
+    menu.classList.add('is-open');
+    btn.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+    if (input) setTimeout(() => input.focus(), 0);
+  };
+
+  const close = () => {
+    if (!menu.classList.contains('is-open')) return;
+    menu.classList.remove('is-open');
+    btn.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+  };
+
+  btn.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    menu.classList.contains('is-open') ? close() : open();
+  });
+
+  menu.addEventListener('click', (ev) => ev.stopPropagation());
+
+  document.addEventListener('click', (ev) => {
+    if (menu.contains(ev.target) || btn.contains(ev.target)) return;
+    close();
+  });
+})();
+
+/* ========= Media panel (aside scroll) ========= */
+(() => {
+  const btn = document.querySelector('#mediaBtn');
+  const panel = document.querySelector('#asideScroll');
+  if (!btn || !panel) return;
+
+  const open = () => {
+    // закриваємо інші меню, залишаємо лише media
+    closeActions('#mediaBtn');
+    btn.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+    panel.classList.add('is-open');
+  };
+
+  const close = () => {
+    btn.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+    panel.classList.remove('is-open');
+  };
+
+  // toggle за кліком по кнопці
+  btn.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    btn.classList.contains('is-open') ? close() : open();
+  });
+
+  // клік поза панеллю — закрити
+  document.addEventListener('click', (ev) => {
+    if (btn.contains(ev.target) || panel.contains(ev.target)) return;
+    close();
+  });
+
+  // ВІДКРИВАЄМО ЗА ЗАМОВЧУВАННЯМ
+  requestAnimationFrame(open);
+})();
+
+/* ========= Project modal (single implementation) ========= */
+(() => {
+  const modal = document.getElementById('projectModal');
+  if (!modal) return;
+
+  const dialog = modal.querySelector('.project-modal__dialog');
+  const triggers = document.querySelectorAll('.project, .project__link'); // увесь кард + лінк
+  const closers = modal.querySelectorAll('[data-close]');
+
+  const lockScroll = (on) => {
+    document.documentElement.style.overflow = on ? 'hidden' : '';
+  };
+
+  let swiper = null;
+  const initSwiper = window.__initMediaSwiper || null; // якщо у тебе є ініціалізація окремо
+
+  function open(ev) {
+    if (ev) ev.preventDefault();
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    lockScroll(true);
+    initSwiper && initSwiper(); // або прибери рядок, якщо ініціалізація вже є нижче
+  }
+
+  function close() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    lockScroll(false);
+  }
+
+  // клік по всій картці .project або по .project__link
+  triggers.forEach((t) => {
+    // доступність для всієї картки
+    if (t.classList.contains('project')) {
+      t.setAttribute('role', 'button');
+      t.setAttribute('tabindex', '0');
+      t.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          open();
         }
-        let s = e.target.closest('.service-opt');
-        if (s) {
-          s.classList.toggle('is-checked');
-          let i = s.querySelector('input');
-          i && (i.checked = s.classList.contains('is-checked'));
-        }
-      }),
-      new MutationObserver(() => requestAnimationFrame(c)).observe(s, {
-        subtree: !0,
-        childList: !0,
       });
-  })(),
-  (() => {
-    let e = document.getElementById('locationBtn'),
-      t = document.getElementById('locationMenu'),
-      s = t?.querySelector('.location-input');
-    function i() {
-      !t.classList.contains('is-open') &&
-        (t.classList.add('is-open'),
-        e.classList.add('is-open'),
-        e.setAttribute('aria-expanded', 'true'),
-        s && setTimeout(() => s.focus(), 0));
     }
-    function n() {
-      t.classList.contains('is-open') &&
-        (t.classList.remove('is-open'),
-        e.classList.remove('is-open'),
-        e.setAttribute('aria-expanded', 'false'));
+    t.addEventListener('click', (e) => {
+      // блокуємо перехід по <a>, модалка важливіша
+      if (t.matches('.project__link')) e.preventDefault();
+      open();
+    });
+  });
+
+  // закриття
+  closers.forEach((c) => c.addEventListener('click', close));
+  modal.addEventListener('click', (e) => {
+    if (!dialog.contains(e.target)) close();
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+})();
+
+// 1) Ініціалізація Swiper з дефолтними bullet класами
+const mediaSwiper = new Swiper('#mediaSwiper', {
+  slidesPerView: 1,
+  loop: true,
+  autoHeight: true,
+  navigation: { prevEl: '#mdPrev', nextEl: '#mdNext' },
+  pagination: {
+    el: '#mediaDots', // цей самий вузол переносимо між слотами
+    clickable: true,
+    bulletClass: 'swiper-pagination-bullet',
+    bulletActiveClass: 'swiper-pagination-bullet-active',
+    // без renderBullet — використовуємо дефолтні <span>
+  },
+});
+
+// 2) Перенесення #mediaDots між десктоп/моб
+(() => {
+  const swiperRoot = document.getElementById('mediaSwiper');
+  const dots = document.getElementById('mediaDots');
+  const mobileSlot = document.getElementById('mediaDotsMobile');
+  if (!swiperRoot || !dots || !mobileSlot) return;
+
+  const mq = window.matchMedia('(max-width: 767.98px)');
+  const place = () => {
+    if (mq.matches) {
+      if (!mobileSlot.contains(dots)) mobileSlot.appendChild(dots);
+    } else {
+      if (!swiperRoot.contains(dots)) swiperRoot.appendChild(dots);
     }
-    e &&
-      t &&
-      (e.addEventListener('click', (e) => {
-        e.stopPropagation(), t.classList.contains('is-open') ? n() : i();
-      }),
-      t.addEventListener('click', (e) => e.stopPropagation()),
-      document.addEventListener('click', (s) => {
-        t.contains(s.target) || e.contains(s.target) || n();
-      }));
-  })(),
-  (() => {
-    let e = document.getElementById('projectModal');
-    if (!e) return;
-    let t = e.querySelector('.project-modal__dialog'),
-      s = e.querySelectorAll('[data-close]'),
-      i = document.querySelectorAll('.project__link');
-    function n(e) {
-      document.documentElement.style.overflow = e ? 'hidden' : '';
-    }
-    function c(t) {
-      t && t.preventDefault(),
-        e.classList.add('is-open'),
-        e.setAttribute('aria-hidden', 'false'),
-        n(!0);
-    }
-    function l() {
-      e.classList.remove('is-open'),
-        e.setAttribute('aria-hidden', 'true'),
-        n(!1);
-    }
-    i.forEach((e) => e.addEventListener('click', c)),
-      s.forEach((e) => e.addEventListener('click', l)),
-      e.addEventListener('click', (e) => {
-        t.contains(e.target) || l();
-      }),
-      window.addEventListener('keydown', (e) => {
-        'Escape' === e.key && l();
-      });
-    let a = Array.from(e.querySelectorAll('.media-slide')),
-      r = Array.from(e.querySelectorAll('.media-pagination .dot')),
-      o = e.querySelector('#mdPrev'),
-      d = e.querySelector('#mdNext'),
-      u = 0;
-    function p(e) {
-      (u = (e + a.length) % a.length),
-        a.forEach((e, t) => e.classList.toggle('is-active', t === u)),
-        r.forEach((e, t) => e.classList.toggle('is-active', t === u));
-    }
-    o.addEventListener('click', () => p(u - 1)),
-      d.addEventListener('click', () => p(u + 1)),
-      r.forEach((e, t) => e.addEventListener('click', () => p(t)));
-  })(),
-  (() => {
-    let e = document.getElementById('mediaBtn'),
-      t = document.getElementById('asideScroll');
-    function s() {
-      e.classList.add('is-open'),
-        e.setAttribute('aria-expanded', 'true'),
-        t.classList.add('is-open');
-    }
-    function i() {
-      e.classList.remove('is-open'),
-        e.setAttribute('aria-expanded', 'false'),
-        t.classList.remove('is-open');
-    }
-    e &&
-      t &&
-      (e.addEventListener('click', (t) => {
-        t.stopPropagation(), e.classList.contains('is-open') ? i() : s();
-      }),
-      document.addEventListener('click', (s) => {
-        e.contains(s.target) || t.contains(s.target) || i();
-      }));
-  })(),
-  (() => {
-    let e = document.getElementById('projectModal');
-    if (!e) return;
-    let t = e.querySelector('.project-modal__dialog'),
-      s = e.querySelectorAll('[data-close]'),
-      i = document.querySelectorAll('.project__link');
-    function n(e) {
-      document.documentElement.style.overflow = e ? 'hidden' : '';
-    }
-    function c(t) {
-      t && t.preventDefault(),
-        e.classList.add('is-open'),
-        e.setAttribute('aria-hidden', 'false'),
-        n(!0);
-    }
-    function l() {
-      e.classList.remove('is-open'),
-        e.setAttribute('aria-hidden', 'true'),
-        n(!1);
-    }
-    i.forEach((e) => e.addEventListener('click', c)),
-      s.forEach((e) => e.addEventListener('click', l)),
-      e.addEventListener('click', (e) => {
-        t.contains(e.target) || l();
-      }),
-      window.addEventListener('keydown', (e) => {
-        'Escape' === e.key && l();
-      });
-    let a = Array.from(e.querySelectorAll('.media-slide')),
-      r = Array.from(e.querySelectorAll('#mediaDots .dot')),
-      o = Array.from(e.querySelectorAll('#mediaDotsMobile .dot')),
-      d = e.querySelector('#mdPrev'),
-      u = e.querySelector('#mdNext'),
-      p = e.querySelector('#mdPrevMobile'),
-      v = e.querySelector('#mdNextMobile'),
-      L = 0;
-    function E(e) {
-      (L = (e + a.length) % a.length),
-        a.forEach((e, t) => e.classList.toggle('is-active', t === L)),
-        [...r, ...o].forEach((e, t) =>
-          e.classList.toggle('is-active', t === L)
-        );
-    }
-    [d, p].forEach((e) => e?.addEventListener('click', () => E(L - 1))),
-      [u, v].forEach((e) => e?.addEventListener('click', () => E(L + 1))),
-      [...r, ...o].forEach((e, t) => e.addEventListener('click', () => E(t)));
-  })();
+    // Після перенесення оновити позиціонування всередині Swiper
+    mediaSwiper.pagination && mediaSwiper.pagination.render();
+    mediaSwiper.pagination && mediaSwiper.pagination.update();
+  };
+  mq.addEventListener
+    ? mq.addEventListener('change', place)
+    : mq.addListener(place);
+  place();
+})();
+const prevMob = document.getElementById('mdPrevMobile');
+const nextMob = document.getElementById('mdNextMobile');
+if (prevMob) prevMob.addEventListener('click', () => mediaSwiper.slidePrev());
+if (nextMob) nextMob.addEventListener('click', () => mediaSwiper.slideNext());

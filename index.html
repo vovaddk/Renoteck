@@ -10,6 +10,10 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
     <title>Renoteck</title>
   </head>
   <body>
@@ -656,7 +660,8 @@
           </svg>
         </button>
 
-        <!-- row: prev | image | next -->
+        <!-- Modal: media with Swiper -->
+        <!-- Modal: media with Swiper -->
         <div class="modal-media-row">
           <button
             class="media-nav media-nav--prev"
@@ -664,8 +669,13 @@
             id="mdPrev"
             aria-label="Previous"
           >
-            <!-- left chevron -->
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M15 19L8 12L15 5"
                 stroke="#EDEDED"
@@ -677,57 +687,57 @@
           </button>
 
           <div class="modal-media" id="modalMedia">
-            <!-- left tags -->
-            <div class="media-tags media-tags--left">
-              <span class="media-chip">Snap-look</span>
-              <span class="media-chip">Brown color</span>
-            </div>
-            <!-- right tag -->
-            <div class="media-tags media-tags--right">
-              <span class="media-chip">
-                <span class="media-ico"
-                  ><svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                  >
-                    <path
-                      d="M10 5C9.38193 5 8.77775 5.18328 8.26384 5.52666C7.74994 5.87004 7.3494 6.3581 7.11288 6.92911C6.87635 7.50013 6.81447 8.12847 6.93505 8.73466C7.05562 9.34085 7.35325 9.89767 7.79029 10.3347C8.22733 10.7717 8.78415 11.0694 9.39034 11.19C9.99653 11.3105 10.6249 11.2486 11.1959 11.0121C11.7669 10.7756 12.255 10.3751 12.5983 9.86116C12.9417 9.34725 13.125 8.74307 13.125 8.125C13.125 7.2962 12.7958 6.50134 12.2097 5.91529C11.6237 5.32924 10.8288 5 10 5ZM10 10C9.62916 10 9.26665 9.89003 8.95831 9.68401C8.64996 9.47798 8.40964 9.18514 8.26773 8.84253C8.12581 8.49992 8.08868 8.12292 8.16103 7.75921C8.23337 7.39549 8.41195 7.0614 8.67417 6.79917C8.9364 6.53695 9.27049 6.35837 9.63421 6.28603C9.99792 6.21368 10.3749 6.25081 10.7175 6.39273C11.0601 6.53464 11.353 6.77496 11.559 7.08331C11.765 7.39165 11.875 7.75416 11.875 8.125C11.875 8.62228 11.6775 9.09919 11.3258 9.45083C10.9742 9.80246 10.4973 10 10 10ZM10 1.25C8.17727 1.25207 6.42979 1.97706 5.14092 3.26592C3.85206 4.55479 3.12707 6.30227 3.125 8.125C3.125 10.5781 4.25859 13.1781 6.40625 15.6445C7.37127 16.759 8.45739 17.7626 9.64453 18.6367C9.74962 18.7103 9.87482 18.7498 10.0031 18.7498C10.1314 18.7498 10.2566 18.7103 10.3617 18.6367C11.5467 17.7623 12.6307 16.7587 13.5938 15.6445C15.7383 13.1781 16.875 10.5781 16.875 8.125C16.8729 6.30227 16.1479 4.55479 14.8591 3.26592C13.5702 1.97706 11.8227 1.25207 10 1.25ZM10 17.3438C8.70859 16.3281 4.375 12.5977 4.375 8.125C4.375 6.63316 4.96763 5.20242 6.02252 4.14752C7.07742 3.09263 8.50816 2.5 10 2.5C11.4918 2.5 12.9226 3.09263 13.9775 4.14752C15.0324 5.20242 15.625 6.63316 15.625 8.125C15.625 12.5961 11.2914 16.3281 10 17.3438Z"
-                      fill="#FBFBFB"
-                    /></svg></span
-                >Calgary</span
-              >
-            </div>
+            <div class="swiper media-swiper" id="mediaSwiper">
+              <!-- оверлеї тегів (спільні для всіх слайдів) -->
+              <div class="media-tags media-tags--left">
+                <span class="media-chip">Snap-look</span>
+                <span class="media-chip">Brown color</span>
+              </div>
+              <div class="media-tags media-tags--right">
+                <span class="media-chip">
+                  <span class="media-ico">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M10 5C9.38 5 8.78 5.183 8.264 5.527c-.514.343-.915.831-1.152 1.402-.236.571-.298 1.199-.178 1.806.121.606.418 1.163.855 1.6.437.437.994.735 1.6.855.606.121 1.235.059 1.806-.178.571-.236 1.059-.637 1.402-1.151.343-.514.527-1.118.527-1.737 0-.829-.329-1.624-.915-2.21C11.624 5.329 10.829 5 10 5ZM10 10c-.371 0-.733-.11-1.042-.316-.308-.206-.549-.499-.69-.841-.142-.342-.179-.719-.107-1.083.072-.364.251-.698.513-.961.262-.262.596-.441.959-.513.364-.072.741-.035 1.084.107.342.142.635.382.841.691.206.308.316.671.316 1.042 0 .497-.198.974-.549 1.325C10.974 9.802 10.497 10 10 10ZM10 1.25C8.177 1.252 6.43 1.977 5.141 3.266 3.852 4.555 3.127 6.302 3.125 8.125c0 2.453 1.134 5.053 3.281 7.519.965 1.115 2.051 2.119 3.238 2.993.105.073.23.113.358.113s.255-.04.36-.113c1.185-.874 2.269-1.878 3.232-2.992 2.145-2.466 3.282-5.066 3.282-7.519C16.873 6.302 16.148 4.555 14.859 3.266 13.57 1.977 11.823 1.252 10 1.25ZM10 17.344C8.709 16.328 4.375 12.598 4.375 8.125c0-1.492.593-2.922 1.648-3.977C7.078 3.093 8.508 2.5 10 2.5s2.922.593 3.977 1.648C15.032 5.203 15.625 6.633 15.625 8.125c0 4.471-4.334 8.203-5.625 9.219Z"
+                        fill="#FBFBFB"
+                      />
+                    </svg>
+                  </span>
+                  Calgary
+                </span>
+              </div>
 
-            <!-- simple slider (3 slides demo) -->
-            <div class="media-slides" id="mediaSlides">
-              <div class="media-slide is-active">
-                <img
-                  src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1600&auto=format&fit=crop"
-                  alt=""
-                />
+              <!-- слайди -->
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <img
+                    src="assets/img/modal_img.png"
+                    alt=""
+                  />
+                </div>
+                <div class="swiper-slide">
+                  <img
+                      src="assets/img/modal_img.png"
+                    alt=""
+                  />
+                </div>
+                <div class="swiper-slide">
+                  <img
+                     src="assets/img/modal_img.png"
+                    alt=""
+                  />
+                </div>
               </div>
-              <div class="media-slide">
-                <img
-                  src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=1600&auto=format&fit=crop"
-                  alt=""
-                />
-              </div>
-              <div class="media-slide">
-                <img
-                  src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=1600&auto=format&fit=crop"
-                  alt=""
-                />
-              </div>
-            </div>
 
-            <!-- pagination (swiper-like) -->
-            <div class="media-pagination" id="mediaDots" aria-hidden="true">
-              <span class="dot is-active"></span>
-              <span class="dot"></span>
-              <span class="dot"></span>
+              <!-- пагінація: один елемент, який переставляється між десктоп/моб -->
+              <div class="media-pagination" id="mediaDots"></div>
             </div>
           </div>
 
@@ -737,8 +747,13 @@
             id="mdNext"
             aria-label="Next"
           >
-            <!-- right chevron -->
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M9 5l7 7-7 7"
                 stroke="#EDEDED"
@@ -749,14 +764,22 @@
             </svg>
           </button>
         </div>
-        <div class="mobile-controls">
+
+        <!-- мобільні елементи керування; сюди переставляється #mediaDots на телефонах -->
+        <div class="mobile-controls" id="mobileControls">
           <button
             class="media-nav"
             type="button"
             id="mdPrevMobile"
             aria-label="Previous"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M15 19L8 12L15 5"
                 stroke="#EDEDED"
@@ -767,11 +790,8 @@
             </svg>
           </button>
 
-          <div class="media-pagination" id="mediaDotsMobile">
-            <span class="dot is-active"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-          </div>
+          <!-- слот для пагінації на мобільних -->
+          <div class="media-pagination" id="mediaDotsMobile"></div>
 
           <button
             class="media-nav"
@@ -779,7 +799,13 @@
             id="mdNextMobile"
             aria-label="Next"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M9 5l7 7-7 7"
                 stroke="#EDEDED"
@@ -790,6 +816,7 @@
             </svg>
           </button>
         </div>
+
         <!-- title + CTAs -->
         <div class="modal-head">
           <h2 class="modal-title">508 Beechwood Avenue , Middlesex, NJ</h2>
@@ -932,7 +959,7 @@
         </div>
       </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="assets/js/script.js"></script>
   </body>
 </html>
