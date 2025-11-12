@@ -785,32 +785,29 @@
 #asideScroll.is-open {
   max-height: 100vh;
 }
-/* 0) Скинути конфліктні стилі з контейнера пагінації */
+
 #mediaDots,
 #mediaDotsMobile {
-  /* НЕ задавати width/height контейнеру — інакше кулі не влізуть */
   width: auto !important;
   height: auto !important;
-  fill: initial !important; /* fill не працює для <span> */
+  fill: initial !important;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* 1) Кулі Swiper — розміри, кольори, видимість */
 .media-pagination .swiper-pagination-bullet {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #bdbdbd; /* сіра неактивна */
-  opacity: 1; /* завжди видима */
-  margin: 0; /* бо контейнер керує відступами через gap */
+  background: #bdbdbd;
+  opacity: 1;
+  margin: 0;
 }
 .media-pagination .swiper-pagination-bullet-active {
-  background: #ffffff; /* біла активна */
+  background: #ffffff;
 }
 
-/* 2) Позиція на ПК: поверх зображення знизу по центру */
 #mediaSwiper .media-pagination {
   position: absolute;
   left: 50%;
@@ -820,7 +817,6 @@
   pointer-events: auto;
 }
 
-/* 3) На мобільних: між стрілками, без абсолюту */
 @media (max-width: 767.98px) {
   #mobileControls {
     display: flex;
@@ -836,11 +832,119 @@
   }
 }
 
-/* 4) На випадок, якщо у глобальних стилях переозначені змінні Swiper */
 :root {
   --swiper-pagination-bullet-size: 12px;
   --swiper-pagination-bullet-horizontal-gap: 0px;
 }
 .swiper-slide {
   max-height: 450px;
+}
+
+:root {
+  --tr-fast: 140ms;
+  --tr-med: 220ms;
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-io: cubic-bezier(0.45, 0, 0.15, 1);
+  --ring: 0 0 0 3px rgba(69, 91, 212, 0.28);
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* CHIP */
+.chip {
+  transition: background-color var(--tr-med) var(--ease-io),
+    color var(--tr-med) var(--ease-io),
+    border-color var(--tr-med) var(--ease-io),
+    box-shadow var(--tr-fast) var(--ease-out),
+    transform var(--tr-fast) var(--ease-out);
+  will-change: transform, background-color, color, box-shadow;
+}
+.chip:hover {
+  transform: translateY(-1px);
+}
+.chip:active {
+  transform: translateY(0) scale(0.98);
+}
+.chip.active {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+.chip:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+/* SEGMENTED */
+.segmented__btn {
+  transition: background-color var(--tr-med) var(--ease-io),
+    color var(--tr-med) var(--ease-io),
+    border-color var(--tr-med) var(--ease-io),
+    box-shadow var(--tr-fast) var(--ease-out),
+    transform var(--tr-fast) var(--ease-out);
+}
+.segmented__btn:hover {
+  transform: translateY(-1px);
+}
+.segmented__btn:active {
+  transform: translateY(0) scale(0.98);
+}
+.segmented__btn.is-active {
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+}
+.segmented__btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+/* ACTION BTN */
+.action-btn {
+  transition: background-color var(--tr-med) var(--ease-io),
+    color var(--tr-med) var(--ease-io),
+    border-color var(--tr-med) var(--ease-io),
+    box-shadow var(--tr-fast) var(--ease-out),
+    transform var(--tr-fast) var(--ease-out),
+    opacity var(--tr-fast) var(--ease-io);
+  will-change: transform, background-color, color, box-shadow;
+}
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+.action-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+.action-btn.is-open {
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+}
+.action-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+.action-btn.is-open .ico svg {
+  transition: transform var(--tr-med) var(--ease-io);
+  transform: rotate(90deg);
+}
+
+/* CTA BTN */
+.cta-btn {
+  transition: background-color var(--tr-med) var(--ease-io),
+    color var(--tr-med) var(--ease-io),
+    border-color var(--tr-med) var(--ease-io),
+    box-shadow var(--tr-fast) var(--ease-out),
+    transform var(--tr-fast) var(--ease-out);
+  will-change: transform, box-shadow, background-color, color;
+}
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+}
+.cta-btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+.cta-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
 }
