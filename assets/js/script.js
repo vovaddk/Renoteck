@@ -29,7 +29,7 @@ const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 /* ========= Custom scrollbar for #projects ========= */
 (() => {
   const host = $('#projects');
-  const thumb = $('#sbActive'); // thumb height track is 371px in layout
+  const thumb = $('#sbActive'); 
   if (!host || !thumb) return;
 
   const TRACK_H = 371; // match your CSS/markup
@@ -300,7 +300,7 @@ function closeActions(exceptBtnSelector) {
   };
 
   const syncHeights = () => {
-    // десктоп — не чіпаємо inline-висоти
+
     if (!isMobile()) {
       aside.style.height = '';
       panel.style.height = '';
@@ -312,7 +312,7 @@ function closeActions(exceptBtnSelector) {
     }
 
     if (panel.classList.contains('is-open')) {
-      // ВІДКРИТО: рахуємо і фіксуємо
+
       aside.style.height = 'auto';
 
       const fullH = getPanelFullHeight();
@@ -323,9 +323,9 @@ function closeActions(exceptBtnSelector) {
 
       aside.classList.add('panel-is-open');
     } else {
-      // ЗАКРИТО: повністю складаємо панель і прибираємо зайву висоту aside
+
       panel.style.height = '0px';
-      aside.style.height = ''; // <<< ключове — скинув інлайнову висоту
+      aside.style.height = '';
       aside.classList.remove('panel-is-open');
     }
   };
