@@ -782,6 +782,7 @@
   display: grid;
   place-items: center;
   cursor: pointer;
+
 }
 
 .project-modal__body {
