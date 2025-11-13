@@ -356,3 +356,13 @@
     padding: 10px;
   }
 }
+.action-btn--menu {
+  display: inline-flex; 
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .action-btn--menu {
+    display: none;
+  }
+}

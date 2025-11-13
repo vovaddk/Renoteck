@@ -29,7 +29,7 @@ const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 /* ========= Custom scrollbar for #projects ========= */
 (() => {
   const host = $('#projects');
-  const thumb = $('#sbActive'); 
+  const thumb = $('#sbActive'); // thumb height track is 371px in layout
   if (!host || !thumb) return;
 
   const TRACK_H = 371; // match your CSS/markup
@@ -286,21 +286,8 @@ function closeActions(exceptBtnSelector) {
 
   const isMobile = () => window.matchMedia('(max-width: 1023px)').matches;
 
-  const getPanelFullHeight = () => {
-    panel.style.height = 'auto';
-    const base = panel.scrollHeight;
-
-    const last = panel.lastElementChild;
-    if (!last) return base;
-
-    const styles = window.getComputedStyle(last);
-    const mb = parseFloat(styles.marginBottom) || 0;
-
-    return base + mb;
-  };
-
   const syncHeights = () => {
-
+    // На десктопі даємо CSS усе вирішувати
     if (!isMobile()) {
       aside.style.height = '';
       panel.style.height = '';
@@ -311,21 +298,27 @@ function closeActions(exceptBtnSelector) {
       return;
     }
 
+    // Мобільний / планшет – працюємо динамічно
     if (panel.classList.contains('is-open')) {
+      // 1) відкрили: рахуємо повну висоту aside__scrollwrap
+      panel.style.height = 'auto'; // скинули, щоб порахувалось
+      const wrapH = panel.scrollHeight; // ПОВНА висота aside__scrollwrap is-open
+      panel.style.height = wrapH + 'px';
 
+      // 2) тепер рахуємо висоту всього section-map__aside
       aside.style.height = 'auto';
-
-      const fullH = getPanelFullHeight();
-      panel.style.height = fullH + 'px';
-
       const asideH = aside.scrollHeight;
       aside.style.height = asideH + 'px';
 
       aside.classList.add('panel-is-open');
     } else {
-
+      // Закритий стан: висота тільки під «шапку» aside
       panel.style.height = '0px';
-      aside.style.height = '';
+
+      aside.style.height = 'auto';
+      const asideH = aside.scrollHeight;
+      aside.style.height = asideH + 'px';
+
       aside.classList.remove('panel-is-open');
     }
   };
@@ -347,23 +340,29 @@ function closeActions(exceptBtnSelector) {
     requestAnimationFrame(syncHeights);
   };
 
+  // toggle за кліком по кнопці
   btn.addEventListener('click', (ev) => {
     ev.stopPropagation();
     btn.classList.contains('is-open') ? close() : open();
   });
 
+  // клік поза панеллю — закрити
   document.addEventListener('click', (ev) => {
     if (btn.contains(ev.target) || panel.contains(ev.target)) return;
     close();
   });
 
+  // ресайз — перерахувати
   window.addEventListener('resize', syncHeights);
 
-  panel.querySelectorAll('img').forEach((img) => {
+  // якщо всередині є картинки — після завантаження теж перерахувати
+  const imgs = panel.querySelectorAll('img');
+  imgs.forEach((img) => {
     if (img.complete) return;
     img.addEventListener('load', syncHeights);
   });
 
+  // Старт: панель відкрита
   requestAnimationFrame(open);
 })();
 
