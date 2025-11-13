@@ -29,26 +29,52 @@ const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 /* ========= Custom scrollbar for #projects ========= */
 (() => {
   const host = $('#projects');
-  const thumb = $('#sbActive'); // thumb height track is 371px in layout
-  if (!host || !thumb) return;
+  const thumb = $('#sbActive');
+  const track = thumb ? thumb.closest('.scrollbar') : null;
+  const bottomCard = $('.aside-card--bottom');
 
-  const TRACK_H = 371; // match your CSS/markup
+  if (!host || !thumb || !track || !bottomCard) return;
+
   const MIN_THUMB = 24;
+  const TRACK_PADDING_BOTTOM = 10;
+  // -------------------------
 
   const update = () => {
     const viewH = host.clientHeight;
     const scrollH = host.scrollHeight;
-    const thumbH = Math.max(MIN_THUMB, Math.round((viewH / scrollH) * TRACK_H));
+    const trackH = viewH - TRACK_PADDING_BOTTOM;
+    track.style.height = trackH + 'px';
+    track.style.marginTop = '0px';
+    if (trackH <= 0 || viewH === 0 || scrollH === 0 || viewH >= scrollH) {
+      thumb.style.height = '0px';
+      return;
+    }
+    const thumbH = Math.max(MIN_THUMB, Math.round((viewH / scrollH) * trackH));
     const top = Math.round(
-      (host.scrollTop / Math.max(scrollH - viewH, 1)) * (TRACK_H - thumbH)
+      (host.scrollTop / Math.max(scrollH - viewH, 1)) * (trackH - thumbH)
     );
+
     thumb.style.height = thumbH + 'px';
     thumb.style.marginTop = top + 'px';
   };
 
   host.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update);
-  update();
+
+  bottomCard.addEventListener('transitionend', (e) => {
+    if (e.propertyName === 'max-height') {
+      update();
+    }
+  });
+
+  const imgs = host.querySelectorAll('img');
+  imgs.forEach((img) => {
+    if (img.complete) return;
+    img.addEventListener('load', () => {
+      setTimeout(update, 50);
+    });
+  });
+  setTimeout(update, 350);
 })();
 
 /* ========= Aside promo toggle ========= */
