@@ -1107,7 +1107,7 @@
     height: 100vh;
     max-height: 100vh;
     border-radius: 0;
-    padding: 70px 12px 20px;
+    padding: 75px 12px 20px;
     overflow: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -1117,7 +1117,7 @@
   }
 
   .project-modal__close {
-    top: 18px;
+    top: 22px;
     right: 8px;
     width: 36px;
     height: 36px;
