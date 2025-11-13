@@ -59,6 +59,7 @@
     max-height: 565px;
     border-radius: 8px;
     width: 100%;
+    transition: margin-top 0.3s ease;
   }
 }
 
@@ -225,6 +226,7 @@
     height: 48px;
     box-sizing: border-box;
     margin: 0;
+    margin-bottom: 15px;
   }
 
   .services-menu {
@@ -380,34 +382,44 @@
     padding: 16px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   }
+
+  /* --- 💡 ОСЬ ВИПРАВЛЕННЯ 💡 --- */
+
   .aside-card--bottom {
-    margin-top: 12px;
+    /* 1. ВСТАНОВЛЮЄМО ВІДСТУП В 0, КОЛИ БЛОК ЗАКРИТИЙ */
+    margin-top: 0; /* Було 12px */
 
     background: transparent;
-
     box-shadow: none;
-
     padding: 0;
 
     opacity: 0;
     visibility: hidden;
     max-height: 0;
     overflow: hidden;
+
+    /* 'margin-top' тепер теж буде плавно анімуватись */
     transition: opacity 0.3s ease, visibility 0.3s ease, max-height 0.3s ease,
       margin-top 0.3s ease;
   }
+
   .aside-card--bottom.is-open {
     opacity: 1;
     visibility: visible;
-    max-height: 2000px;
+    max-height: 2000px; /* Або можна 'max-content', якщо не потрібна анімація висоти */
     background: #262626;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
     padding: 16px;
+
+    /* 2. ДОДАЄМО ВІДСТУП ТІЛЬКИ У ВІДКРИТОМУ СТАНІ */
     margin-top: 12px;
   }
+
+  /* 3. Цей дублюючий блок більше не потрібен
   .aside-card--bottom {
-    margin-top: 12px; /* той самий "розрив" */
+    margin-top: 12px; 
   }
+  */
 }
 /* Desktop */
 @media (min-width: 1024px) {

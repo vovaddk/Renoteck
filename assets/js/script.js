@@ -278,96 +278,96 @@ function closeActions(exceptBtnSelector) {
 
 /* ========= Media panel (aside scroll) ========= */
 (() => {
-  const btn = document.querySelector('#mediaBtn');
-  const panel = document.querySelector('#asideScroll'); 
-  const bottomCard = document.querySelector('.aside-card--bottom'); 
-  const projectsList = document.querySelector('#projects'); 
+  const btn = document.querySelector('#moreBtn');
+  const panel = document.querySelector('#asideScroll');
+  const bottomCard = document.querySelector('.aside-card--bottom');
   const aside = document.querySelector('.section-map__aside');
+  const mapFrame = document.querySelector('.section-map__frame'); // Карта
 
-  if (!btn || !panel || !aside || !bottomCard) return;
+  if (!btn || !panel || !aside || !bottomCard || !mapFrame) {
+    console.warn('Один або декілька елементів для aside scroll не знайдено.');
+    return;
+  }
 
-  const isMobile = () => window.matchMedia('(max-width: 1023px)').matches;
+  const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
 
-  const syncHeights = () => {
-
-    if (!isMobile()) {
-      aside.style.height = '';
-      panel.style.height = '';
-      panel.style.maxHeight = '';
-      aside.classList.toggle(
-        'panel-is-open',
-        panel.classList.contains('is-open')
-      );
-      bottomCard.classList.toggle(
-        'is-open',
-        panel.classList.contains('is-open')
-      );
-      return;
-    }
-
-    if (panel.classList.contains('is-open')) {
-
-      panel.style.height = 'auto';
-      panel.style.maxHeight = 'none';
-      
-      const panelContentHeight = projectsList ? projectsList.scrollHeight : panel.scrollHeight;
-      
-      const maxPanelHeight = Math.min(panelContentHeight, 400);
-      panel.style.height = maxPanelHeight + 'px';
-      panel.style.maxHeight = maxPanelHeight + 'px';
-      
-      requestAnimationFrame(() => {
-        aside.style.height = 'auto';
-        const finalAsideHeight = aside.scrollHeight;
-        aside.style.height = finalAsideHeight + 'px';
-      });
-      
-      aside.classList.add('panel-is-open');
-      bottomCard.classList.add('is-open'); 
-    } else {
-
-      panel.style.height = '0px';
-      panel.style.maxHeight = '0px';
-      
-      requestAnimationFrame(() => {
-        aside.style.height = 'auto';
-        const asideH = aside.scrollHeight;
-        aside.style.height = asideH + 'px';
-      });
-      
-      aside.classList.remove('panel-is-open');
-      bottomCard.classList.remove('is-open'); 
-    }
-  };
-
+  
   const open = () => {
-    closeActions('#mediaBtn');
+    closeActions('#moreBtn'); 
+    
     btn.classList.add('is-open');
     btn.setAttribute('aria-expanded', 'true');
     panel.classList.add('is-open');
+    bottomCard.classList.add('is-open');
+    aside.classList.add('panel-is-open');
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(syncHeights);
-    });
+    if (isMobile()) {
+      mapFrame.style.marginTop = '35%';
+    }
   };
 
   const close = () => {
+    // Знімаємо класи
     btn.classList.remove('is-open');
     btn.setAttribute('aria-expanded', 'false');
     panel.classList.remove('is-open');
+    bottomCard.classList.remove('is-open');
+    aside.classList.remove('panel-is-open');
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(syncHeights);
-    });
+    if (isMobile()) {
+      mapFrame.style.marginTop = '0';
+    }
   };
+
+  
+  const handleModeChange = () => {
+    if (isMobile()) {
+
+      btn.style.display = '';
+      
+      aside.style.height = '';
+      panel.style.height = '';
+      panel.style.maxHeight = '';
+      
+           if (btn.classList.contains('is-open')) {
+        open();
+      } else {
+        close(); 
+      }
+    } else {
+
+      btn.style.display = 'none';
+      
+      aside.style.height = '';
+      panel.style.height = '';
+      panel.style.maxHeight = '';
+
+      mapFrame.style.marginTop = ''; 
+
+      open(); 
+    }
+  };
+
 
   btn.addEventListener('click', (ev) => {
     ev.stopPropagation();
-    btn.classList.contains('is-open') ? close() : open();
+    if (btn.classList.contains('is-open')) {
+      close();
+    } else {
+      open();
+    }
   });
 
   document.addEventListener('click', (ev) => {
-    if (btn.contains(ev.target) || panel.contains(ev.target)) return;
+    if (!isMobile()) return; 
+    
+    if (
+      btn.contains(ev.target) ||
+      (bottomCard && bottomCard.contains(ev.target))
+    ) {
+      return;
+    }
+    
     if (btn.classList.contains('is-open')) {
       close();
     }
@@ -376,20 +376,20 @@ function closeActions(exceptBtnSelector) {
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(syncHeights, 100);
+    resizeTimer = setTimeout(handleModeChange, 100);
   });
 
   const imgs = panel.querySelectorAll('img');
   imgs.forEach((img) => {
     if (img.complete) return;
     img.addEventListener('load', () => {
-      if (panel.classList.contains('is-open')) {
-        syncHeights();
-      }
+
     });
   });
+  open(); 
 
-  syncHeights();
+  handleModeChange();
+  
 })();
 
 /* ========= Project modal + media swiper ========= */
