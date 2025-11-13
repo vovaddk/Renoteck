@@ -278,11 +278,21 @@ function closeActions(exceptBtnSelector) {
 
 /* ========= Media panel (aside scroll) ========= */
 (() => {
+  if (typeof ACTIONS !== 'undefined' && Array.isArray(ACTIONS)) {
+    const indexToRemove = ACTIONS.findIndex(
+      (action) => action.panel === '#asideScroll' || action.btn === '#mediaBtn'
+    );
+
+    if (indexToRemove > -1) {
+      ACTIONS.splice(indexToRemove, 1);
+    }
+  }
+
   const btn = document.querySelector('#moreBtn');
   const panel = document.querySelector('#asideScroll');
   const bottomCard = document.querySelector('.aside-card--bottom');
   const aside = document.querySelector('.section-map__aside');
-  const mapFrame = document.querySelector('.section-map__frame'); // Карта
+  const mapFrame = document.querySelector('.section-map__frame');
 
   if (!btn || !panel || !aside || !bottomCard || !mapFrame) {
     console.warn('Один або декілька елементів для aside scroll не знайдено.');
@@ -291,10 +301,9 @@ function closeActions(exceptBtnSelector) {
 
   const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
 
-  
   const open = () => {
-    closeActions('#moreBtn'); 
-    
+    closeActions('#moreBtn');
+
     btn.classList.add('is-open');
     btn.setAttribute('aria-expanded', 'true');
     panel.classList.add('is-open');
@@ -307,7 +316,6 @@ function closeActions(exceptBtnSelector) {
   };
 
   const close = () => {
-    // Знімаємо класи
     btn.classList.remove('is-open');
     btn.setAttribute('aria-expanded', 'false');
     panel.classList.remove('is-open');
@@ -319,35 +327,31 @@ function closeActions(exceptBtnSelector) {
     }
   };
 
-  
   const handleModeChange = () => {
     if (isMobile()) {
-
       btn.style.display = '';
-      
+
       aside.style.height = '';
       panel.style.height = '';
       panel.style.maxHeight = '';
-      
-           if (btn.classList.contains('is-open')) {
+
+      if (btn.classList.contains('is-open')) {
         open();
       } else {
-        close(); 
+        close();
       }
     } else {
-
       btn.style.display = 'none';
-      
+
       aside.style.height = '';
       panel.style.height = '';
       panel.style.maxHeight = '';
 
-      mapFrame.style.marginTop = ''; 
+      mapFrame.style.marginTop = '';
 
-      open(); 
+      open();
     }
   };
-
 
   btn.addEventListener('click', (ev) => {
     ev.stopPropagation();
@@ -359,15 +363,15 @@ function closeActions(exceptBtnSelector) {
   });
 
   document.addEventListener('click', (ev) => {
-    if (!isMobile()) return; 
-    
+    if (!isMobile()) return;
+
     if (
       btn.contains(ev.target) ||
       (bottomCard && bottomCard.contains(ev.target))
     ) {
       return;
     }
-    
+
     if (btn.classList.contains('is-open')) {
       close();
     }
@@ -382,14 +386,12 @@ function closeActions(exceptBtnSelector) {
   const imgs = panel.querySelectorAll('img');
   imgs.forEach((img) => {
     if (img.complete) return;
-    img.addEventListener('load', () => {
-
-    });
+    img.addEventListener('load', () => {});
   });
-  open(); 
+
+  open();
 
   handleModeChange();
-  
 })();
 
 /* ========= Project modal + media swiper ========= */
