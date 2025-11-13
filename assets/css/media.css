@@ -1,3 +1,6 @@
+/* =========================
+   ≤1300px
+   ========================= */
 @media (max-width: 1300px) {
   .section-map .container {
     padding: 24px !important;
@@ -5,38 +8,14 @@
   .section-map__wrapp {
     gap: 24px !important;
   }
-  .modal-title {
-    font-size: clamp(22px, 2.2vw, 28px) !important;
-    line-height: 1.2 !important;
-  }
   .details-row {
     gap: 24px !important;
   }
 }
 
-@media (max-width: 1100px) {
-  .modal-media {
-    height: min(50vh, 420px) !important;
-    border-radius: 12px !important;
-  }
-  .modal-media-row .media-nav {
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 12px !important;
-  }
-  #mediaSwiper,
-  #mediaSwiper .swiper-wrapper,
-  #mediaSwiper .swiper-slide {
-    height: 100% !important;
-  }
-  #mediaSwiper .swiper-slide img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    display: block !important;
-  }
-}
-
+/* =========================
+   ≤1024px (планшети)
+   ========================= */
 @media (max-width: 1024px) {
   .section-map__wrapp {
     display: flex !important;
@@ -44,175 +23,58 @@
     gap: 20px !important;
     width: 100% !important;
   }
+
+  /* Першим іде aside (контент) */
+  .section-map__aside {
+    order: 1 !important;
+    width: 100% !important;
+  }
+
+  /* Другим — карта */
+  .section-map__frame,
+  .section-map__map,
+  .section-map .map,
+  .section-map [data-role='map'] {
+    order: 2 !important;
+    width: 100% !important;
+  }
+}
+
+/* =========================
+   ≤768px (маленькі планшети / великі телефони)
+   ========================= */
+@media (max-width: 768px) {
+  .section-map__aside {
+    order: 1 !important;
+  }
+
+  .section-map__frame,
+  .section-map__map,
+  .section-map .map,
+  .section-map [data-role='map'] {
+    order: 2 !important;
+  }
+
   .section-map__frame {
-    order: 1 !important;
-    width: 100% !important;
-  }
-  .section-map__aside {
-    order: 2 !important;
-    width: 100% !important;
-  }
-  .modal-head {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 12px !important;
-  }
-  .details-row {
-    flex-direction: column !important;
-    gap: 16px !important;
+    max-height: 565px;
+    border-radius: 8px;
+    width: 100%;
   }
 }
 
-@media (max-width: 900px) {
-  .modal-title {
-    font-size: 24px !important;
-  }
-  .project__img {
-    height: 200px !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .modal-media {
-    height: 260px !important;
-  }
-
-  /* теги поверх зображення */
-  #mediaSwiper {
-    position: relative !important;
-  }
-  #mediaSwiper .media-tags {
-    position: absolute !important;
-    top: 12px !important;
-    z-index: 10 !important;
-    display: flex !important;
-    gap: 8px !important;
-    pointer-events: none !important;
-  }
-  #mediaSwiper .media-tags--left {
-    left: 12px !important;
-  }
-  #mediaSwiper .media-tags--right {
-    right: 12px !important;
-  }
-
-  /* вимкнути десктопні стрілки, увімкнути мобільні */
-  .modal-media-row .media-nav--prev,
-  .modal-media-row .media-nav--next {
-    display: none !important;
-  }
-  .mobile-controls {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 24px !important;
-    margin-top: 12px !important;
-  }
-  .mobile-controls .media-nav {
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 12px !important;
-    border: 1px solid #505050 !important;
-    background: #262626 !important;
-    display: grid !important;
-    place-items: center !important;
-  }
-
-  /* пагінація між стрілками */
-  .mobile-controls .media-pagination {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-  }
-  .mobile-controls .media-pagination .swiper-pagination-bullet {
-    width: 10px !important;
-    height: 10px !important;
-    border-radius: 50% !important;
-    background: rgba(251, 251, 251, 0.5) !important;
-  }
-  .mobile-controls .media-pagination .swiper-pagination-bullet-active {
-    background: #fff !important;
-  }
-}
-
-@media (max-width: 1300px) {
-  .project-modal__dialog {
-    width: 100vw !important;
-    max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 12px !important;
-    border-radius: 12px !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .project-modal__dialog {
-    padding-top: 56px !important;
-  }
-  .modal-media-row {
-    margin-top: 16px !important;
-  }
-
-  /* крапки пагінації (якщо показуються поверх зображення) */
-  #mediaSwiper .media-pagination {
-    position: absolute !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    bottom: 12px !important;
-    z-index: 2 !important;
-  }
-  .media-pagination .swiper-pagination-bullet {
-    width: 12px !important;
-    height: 12px !important;
-    border-radius: 50% !important;
-    background: #bdbdbd !important;
-    opacity: 1 !important;
-    margin: 0 !important;
-  }
-  .media-pagination .swiper-pagination-bullet-active {
-    background: #fff !important;
-  }
-}
-/* Put at the very end of media.css */
-
-/* ≤1024px: карта завжди останньою, порядок не змінюємо на ширших */
-@media (max-width: 1024px) {
-  /* перший іде контент/aside */
-  .section-map__aside {
-    order: 1 !important;
-  }
-
-  /* другим (внизу) іде карта */
-  .section-map__frame,
-  .section-map__map,
-  .section-map .map,
-  .section-map [data-role='map'] {
-    order: 2 !important;
-  }
-}
-
-/* дублюємо на мобільних, щоб перекрити можливі правила нижче */
-@media (max-width: 768px) {
-  .section-map__aside {
-    order: 1 !important;
-  }
-  .section-map__frame,
-  .section-map__map,
-  .section-map .map,
-  .section-map [data-role='map'] {
-    order: 2 !important;
-  }
-}
-
-@media (max-width: 480px) {
+/* =========================
+   ≤600px (телефони)
+   ========================= */
+@media (max-width: 650px) {
   .section-map__head > :not(.section-map__title):not(.segmented),
   .section-map__wrapp > :not(.section-map__aside):not(.section-map__frame) {
     display: none !important;
   }
+
   .section-map .container {
     padding: 12px !important;
   }
+
   .section-map .container > * {
     margin-top: 12px !important;
     margin-bottom: 12px !important;
@@ -223,22 +85,28 @@
   .section-map .container > :last-child {
     margin-bottom: 0 !important;
   }
-  .section-map__wrapp {
-    gap: 12px !important;
-  }
-  .section-map__wrapp > * {
-    margin: 0 !important;
-  }
+
   .section-map__head {
+    text-align: left;
+    align-items: self-start;
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
+
   .section-map__title {
     font-size: 28px;
     line-height: 1.2;
     letter-spacing: -0.01em;
   }
+
+  .section-map__wrapp {
+    display: flex !important;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
   .aside__refresh,
   .chip,
   .location-input,
@@ -246,107 +114,133 @@
   .project__title {
     font-size: 14px;
   }
+
   .segmented {
     width: 100% !important;
     box-sizing: border-box !important;
     height: 48px;
-    margin-left: 12px;
+    margin-left: 0;
   }
+
   .segmented__btn {
     padding: 10px;
     font-size: 14px;
   }
+
   .segmented__btn-text {
     height: 20px;
   }
+
   .section-map__cities {
     display: none;
   }
+
   .chips {
     gap: 8px;
   }
+
   .chip {
     padding: 8px 10px;
   }
-  .section-map__wrapp {
-    display: flex !important;
-    flex-direction: column;
-    gap: 16px;
-    width: 100%;
-  }
-  .action-btn--menu,
-  .aside__actions .action-btn .ico--primary,
-  .aside__actions .action-btn.is-open .ico--primary {
-    display: inline-flex !important;
-  }
+
   .section-map__aside {
     order: 1;
     width: 100%;
+    height: auto;
     padding: 12px 4px;
     border-radius: 8px;
     background: var(--aside-bg, #262626);
+    overflow: visible;
+    z-index: 1;
   }
+
   .section-map__frame {
-    max-height: 565px;
-    border-radius: 8px;
     order: 2;
     width: 100%;
+    max-height: 565px;
+    border-radius: 8px;
   }
+
   .aside__inner {
     gap: 12px;
   }
+
   .aside__top {
     padding: 0 12px;
   }
+
   .aside__left svg {
     width: 18px;
     height: 18px;
   }
+
   .aside__promo {
     margin: 10px 12px 12px;
   }
+
   .aside__promo-img {
     width: 100%;
     height: auto;
   }
+
   .aside__actions {
     position: relative;
     overflow: visible;
     z-index: 20;
   }
-  .services-menu,
-  .services-scrollbar {
-    position: absolute;
-    pointer-events: none;
-    background: #262626;
+
+  /* Кнопки в aside */
+  .aside__actions .action-btn {
+    display: inline-flex;
+    min-width: 44px;
+    height: 44px;
+    padding: 10px;
+    border-radius: 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
   }
-  .aside__actions .action-btn.is-open .ico--close,
+
+  .aside__actions .action-btn .ico--primary,
+  .action-btn--menu {
+    display: inline-flex !important;
+  }
+
+  .aside__actions .action-btn.is-open .ico--close {
+    display: none !important;
+  }
+
   .aside__actions .action-btn > span:not(.ico) {
     display: none !important;
   }
+
   .aside__actions .action-btn .ico svg {
     width: 20px;
     height: 20px;
   }
+
   .aside__cta,
   .cta-btn {
-    width: 100%;
+    width: auto;
     height: 48px;
     box-sizing: border-box;
     margin: 0;
+    padding: 0;
   }
+
+  /* Меню сервісів під кнопкою на всю ширину */
   .services-menu {
+    position: absolute;
     top: calc(100% + 8px);
     left: 12px;
     right: 12px;
     max-width: calc(100vw - 24px);
     height: auto;
-    padding-top: 12px;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding: 12px;
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px solid #505050;
+    background: #262626;
     display: none;
     z-index: 2500;
     opacity: 0;
@@ -354,7 +248,9 @@
     transition: opacity 0.18s, transform 0.18s, visibility 0s linear 0.18s;
     visibility: hidden;
     overflow: hidden;
+    pointer-events: none;
   }
+
   .services-menu.is-open {
     display: flex;
     flex-direction: column;
@@ -366,6 +262,7 @@
     transition: opacity 0.18s, transform 0.18s;
     visibility: visible;
   }
+
   .services-menu__inner {
     height: 100%;
     width: 100%;
@@ -373,22 +270,28 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
+
   .services-menu__inner::-webkit-scrollbar {
     width: 0;
     height: 0;
   }
+
   .location-menu__row,
   .services-item {
     width: 100%;
   }
+
   .services-item__head {
     width: calc(100% - 12px);
   }
+
   .separator {
     width: calc(100% - 24px);
     margin: 10px 12px;
   }
+
   .services-scrollbar {
+    position: absolute;
     top: 12px;
     right: 6px;
     width: 6px;
@@ -397,363 +300,77 @@
     align-items: flex-start;
     border-radius: 5px;
     border: 1px solid #505050;
+    background: #262626;
     z-index: 1;
+    pointer-events: none;
   }
+
   .services-scrollbar__active {
     width: 100%;
     border-radius: 5px;
     background: #2e7bb2;
   }
-  .aside__actions .action-btn {
-    display: inline-flex;
-    min-width: 44px;
-    height: 44px;
-    padding: 10px;
-    border-radius: 12px;
-    justify-content: center;
-    align-items: center;
-    gap: 0;
-  }
-  .aside__actions .action-btn .ico--close,
-  .project-modal__media .media-nav,
-  .project-modal__media [data-overlay-nav] {
-    display: none !important;
-  }
+
+  /* Список проєктів */
   .aside__list {
     width: 100%;
     max-height: 340px;
     padding-right: 0;
   }
+
   .project {
     gap: 6px;
     margin-bottom: 12px;
   }
+
   .project__img {
     height: 160px;
     border-radius: 10px;
   }
+
   .project__title {
     line-height: 20px;
   }
+
   .scrollbar {
     height: 100%;
     box-sizing: border-box;
   }
-  .section-map__aside {
-    overflow: visible;
-    z-index: 1;
-  }
-  @media (max-width: 480px) {
-    .section-map__wrapp > .aside__scrollwrap {
-      display: block !important;
-    }
-  }
+
   .location-menu {
     left: 12px;
     right: 12px;
-    max-width: none;
     max-width: calc(100vw - 24px);
     max-height: none;
     border-radius: 10px;
   }
+
   .location-input {
     width: 100%;
     line-height: 22px;
     padding: 10px;
   }
+
   .location-submit {
     width: 44px;
     height: 44px;
     padding: 10px;
   }
-  .project-modal__dialog {
-    width: 100vw;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 12px;
-    border-radius: 12px;
-    position: relative;
-    box-sizing: border-box;
-    max-height: 100dvh !important;
-  }
-  .project-modal__close {
-    position: absolute !important;
-    top: 8px !important;
-    right: 8px !important;
-    width: 36px !important;
-    height: 36px !important;
-    display: grid !important;
-    place-items: center !important;
-    z-index: 3 !important;
-  }
-  .media-wrapper {
-    position: relative !important;
-    width: 100% !important;
-  }
-  .media-wrapper .media-slide,
-  .media-wrapper img {
-    display: block !important;
-    width: 100% !important;
-    height: 240px !important;
-    object-fit: cover !important;
-    border-radius: 12px !important;
-  }
-  .media-badges {
-    position: absolute !important;
-    top: 10px !important;
-    left: 10px !important;
-    right: 10px !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    z-index: 2 !important;
-    pointer-events: none;
-  }
-  .media-badges .badge {
-    display: inline-flex !important;
-    padding: 8px 10px !important;
-    border-radius: 36px !important;
-    background: rgba(0, 0, 0, 0.24) !important;
-    -webkit-backdrop-filter: blur(26.1px) !important;
-    backdrop-filter: blur(26.1px) !important;
-    color: #fbfbfb !important;
-    font: 500 14px/20px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial !important;
-    white-space: nowrap !important;
-    pointer-events: auto;
-  }
-  .media-controls {
-    margin-top: 10px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 10px !important;
-  }
-  .media-controls .nav-btn {
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 10px !important;
-    border: 1px solid #505050 !important;
-    background: #262626 !important;
-    display: grid !important;
-    place-items: center !important;
-    flex: 0 0 40px !important;
-  }
-  .media-pagination {
-    display: none;
-  }
-  .media-pagination .dot {
-    width: 12px !important;
-    height: 12px !important;
-    border-radius: 50% !important;
-    background: rgba(251, 251, 251, 0.5) !important;
-  }
-  .media-pagination .dot.is-active {
-    background: #fbfbfb !important;
-  }
-  .project-modal__title {
-    margin-top: 12px !important;
-    color: #fbfbfb !important;
-    font: 500 22px/28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial !important;
-    letter-spacing: 0.01em !important;
-  }
-  .rating-block {
-    margin: 16px auto 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-    gap: 6px !important;
-    width: 100% !important;
-  }
-  .rating-block .rating-top {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-  }
-  .rating-block .rating-label {
-    color: #fbfbfb !important;
-    font: 600 16px/20px Montserrat, Inter, system-ui, -apple-system, Segoe UI,
-      Roboto, Arial !important;
-  }
-  .rating-block .rating-stars {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 6px !important;
-  }
-  .rating-block .rating-score {
-    color: #fbfbfb !important;
-    font: 700 16px/20px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial !important;
-    margin-right: 2px !important;
-  }
-  .rating-block .stars svg {
-    width: 14px !important;
-    height: 14px !important;
-  }
-  .project-modal__media .media-controls[data-mobile] {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 10px;
-  }
-  .project-modal__media .media-controls[data-mobile] .nav-btn {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: #262626;
-    border: 2px solid #505050;
-    flex: 0 0 44px;
-  }
-  .project-modal__media .media-controls[data-mobile] .media-pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-  .project-modal__media .media-controls[data-mobile] .media-pagination .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #fbfbfb;
-    opacity: 0.5;
-  }
-  .project-modal__media
-    .media-controls[data-mobile]
-    .media-pagination
-    .dot.is-active {
-    opacity: 1;
-  }
-  .modal-head {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    width: 100%;
-    flex-direction: column;
-  }
-  .modal-title {
-    width: 100%;
-    box-sizing: border-box;
-    font: 500 24px/120% Inter, system-ui, sans-serif;
-  }
-  .details-row {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .project-modal__media .media,
-  .project-modal__media .media-frame,
-  .project-modal__media .modal-media {
-    height: 240px;
-    border-radius: 12px;
-    overflow: hidden;
-  }
 }
+
+/* =========================
+   ≤480px — дрібні правки, якщо треба
+   (окремий медіа-запит, НЕ всередині 600px)
+   ========================= */
+@media (max-width: 480px) {
+  /* якщо треба щось ще — додаси тут */
+}
+
+/* =========================
+   ≥481px — ховаємо мобільне меню-іконку
+   ========================= */
 @media (min-width: 481px) {
   .action-btn--menu {
     display: none !important;
-  }
-}
-.mobile-controls {
-  display: none;
-}
-@media (max-width: 768px) {
-  .desktop-only,
-  .modal-media-row .media-nav--next,
-  .modal-media-row .media-nav--prev {
-    display: none !important;
-  }
-  .mobile-controls {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 24px !important;
-    margin-top: 16px !important;
-    width: 100% !important;
-  }
-  .mobile-controls .media-nav {
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 12px !important;
-    border: 1px solid #505050 !important;
-    background: #262626 !important;
-    display: grid !important;
-    place-items: center !important;
-  }
-  .mobile-controls .media-pagination {
-    flex: 1 1 auto !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 8px !important;
-  }
-  .mobile-controls .media-pagination .dot {
-    width: 10px !important;
-    height: 10px !important;
-    border-radius: 50% !important;
-    background: rgba(251, 251, 251, 0.5) !important;
-    transition: opacity 0.2s !important;
-  }
-  .mobile-controls .media-pagination .dot.is-active {
-    background: #fbfbfb !important;
-    opacity: 1 !important;
-  }
-}
-@media (max-width: 480px) {
-  /* верхній відступ всередині діалогу */
-  .project-modal__dialog {
-    padding-top: 56px !important; /* можна 48–64 */
-  }
-
-  /* невеликий відступ над медіаблоком */
-  .modal-media-row {
-    height: auto;
-    margin-top: 90% !important;
-  }
-
-  /* фіксована висота медіа на мобільних */
-  .modal-media {
-    height: 260px !important; /* за потреби 240/280 */
-  }
-
-  /* СЛАЙДЕР МАЄ ЗАЙМАТИ ВСЮ ВИСОТУ КОНТЕЙНЕРА */
-  #mediaSwiper,
-  #mediaSwiper .swiper-wrapper,
-  #mediaSwiper .swiper-slide {
-    height: 100% !important;
-  }
-
-  #mediaSwiper .swiper-slide img,
-  .modal-media .swiper-slide img,
-  #mediaSwiper .swiper-slide img,
-  .modal-media img {
-    width: 100% !important;
-    height: 100% !important; /* ключ: не auto */
-    max-height: 312px !important;
-    object-fit: cover !important; /* заповнює блок без “стрибків” */
-    display: block !important;
-  }
-
-  /* теги поверх зображення — увімкнено на телефонах */
-  #mediaSwiper .media-tags {
-    position: absolute !important;
-    top: 12px !important;
-    z-index: 10 !important;
-    display: flex !important;
-    gap: 8px !important;
-    pointer-events: none !important;
-  }
-  #mediaSwiper .media-tags--left {
-    left: 12px !important;
-  }
-  #mediaSwiper .media-tags--right {
-    right: 12px !important;
   }
 }

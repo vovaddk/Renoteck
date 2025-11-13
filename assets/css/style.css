@@ -3,6 +3,9 @@
   aspect-ratio: 1/1;
   transition: transform 0.2s;
 }
+.services-item.is-open .services-sublist {
+  display: block;
+}
 .aside__arrow,
 .services-item.is-open .services-item__arrow {
   transform: rotate(180deg);
@@ -205,8 +208,9 @@
 .aside__actions {
   position: relative;
   display: flex;
+  justify-content: center;
   gap: 10px;
-  padding: 0 16px;
+  padding: 0;
   z-index: 1200;
 }
 .action-btn {
@@ -217,6 +221,9 @@
   border-radius: 12px;
   border: 2px solid var(--Red, #a41c35);
   background: var(--Red, #a41c35);
+}
+.action-btn.is-open {
+  min-width: 137px;
 }
 .action-btn .ico {
   width: 20px;
@@ -230,8 +237,11 @@
   font-weight: 500;
   line-height: 24px;
 }
-.aside__cta {
-  padding: 0 16px;
+.aside__cta,
+.aside__cta a {
+  width: auto;
+  height: 48px;
+  padding: 0 12px;
 }
 .cta-btn {
   width: auto;
@@ -354,7 +364,7 @@
 .services-menu {
   position: absolute;
   top: calc(100% + 8px);
-  left: 16px;
+  right: auto;
   display: none;
   width: 307px;
   height: 264px;
@@ -362,13 +372,14 @@
   flex-direction: column;
   gap: 12px;
   border-radius: 12px;
+  border: 1px solid #505050;
   background: #262626;
   overflow: hidden;
   z-index: 1200;
 }
 .separator,
 .services-item {
-  width: 296px;
+  width: 280px;
 }
 .separator {
   height: 1px;
@@ -427,10 +438,6 @@
   display: none;
   padding: 10px 0 0;
 }
-.project-modal.is-open,
-.services-item.is-open .services-sublist {
-  display: block;
-}
 .service-opt {
   height: 24px;
   display: flex;
@@ -459,7 +466,7 @@
   content: '';
   width: 100%;
   height: 100%;
-  background: #2e7bb2;
+  background: #fff;
   display: block;
 }
 .service-opt input {
@@ -471,7 +478,8 @@
 }
 .services-scrollbar {
   position: absolute;
-  left: calc(10px + 283px + 6px);
+  right: 12px;
+  left: auto;
   top: 12px;
   width: 6px;
   height: calc(100% - 24px);
@@ -540,165 +548,12 @@
   border: 1px solid rgba(237, 237, 237, 0.5);
   background: #a41c35;
 }
-.project-modal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  z-index: 3000;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
-}
-.project-modal__backdrop {
-  position: absolute;
-  inset: 0;
-}
-.project-modal__dialog {
-  background-color: #000;
-  position: relative;
-  margin: 40px auto 0;
-  border-radius: 12px;
-  width: 1230px;
-  padding: 50px 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 20px;
-  max-height: calc(100dvh - 24px);
-  overflow-y: auto;
-}
-.project-modal__close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 40px;
-  height: 40px;
-  border: 0;
-  background: 0 0;
-  cursor: pointer;
-}
-.modal-media-row {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  justify-content: center;
-}
-.media-nav {
-  display: flex;
-  height: 57px;
-  padding: 12px 10px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  border-radius: 12px;
-  border: 2px solid #505050;
-  background: #262626;
-  cursor: pointer;
-}
-.modal-media {
-  position: relative;
-  width: 928px;
-  height: 100%;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #111;
-}
-.media-slide,
-.media-slide img,
-.media-slides {
-  width: 100%;
-  height: 100%;
-}
-.media-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 0.25s;
-}
-.media-slide.is-active {
-  opacity: 1;
-  z-index: 1;
-}
-.media-slide img {
-  object-fit: cover;
-  display: block;
-  border-radius: 12px;
-}
-.media-tags {
-  position: absolute;
-  display: flex;
-  gap: 12px;
-  z-index: 2;
-}
-.media-tags--left {
-  top: 16px;
-  left: 16px;
-}
-.media-tags--right {
-  top: 16px;
-  right: 16px;
-  gap: 8px;
-  align-items: center;
-}
-.media-chip {
-  display: flex;
-  padding: 10px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  border-radius: 36px;
-  background: rgba(0, 0, 0, 0.24);
+
+.cta-btn {
   color: #fbfbfb;
   font: 500 16px/24px Inter, system-ui, sans-serif;
 }
-.media-ico {
-  width: 20px;
-  height: 20px;
-}
-.media-pagination {
-  position: absolute;
-  left: 50%;
-  bottom: 14px;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  z-index: 2;
-}
-.media-pagination .dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #fbfbfb;
-  opacity: 0.5;
-}
-.media-pagination .dot.is-active {
-  opacity: 1;
-}
-.modal-head {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  width: 100%;
-}
-.modal-title {
-  width: 814px;
-  color: #fbfbfb;
-  font: 500 48px/120% Inter, system-ui, sans-serif;
-}
-.cta-btn,
-.work-text,
-.work-title {
-  color: #fbfbfb;
-  font: 500 16px/24px Inter, system-ui, sans-serif;
-}
-.modal-ctas {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 296px;
-}
+
 .cta-btn {
   display: flex;
   padding: 12px 24px;
@@ -708,73 +563,6 @@
   border-radius: 12px;
   border: 2px solid transparent;
   cursor: pointer;
-}
-.cta-btn .ico {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #ededed;
-  opacity: 0.85;
-}
-.cta-btn--red {
-  background: #a41c35;
-  border-color: #a41c35;
-}
-.cta-btn--blue {
-  background: #2e7bb2;
-  border-color: #2e7bb2;
-}
-.modal-details {
-  width: 100%;
-}
-.work-title {
-  margin-top: 20px;
-}
-.work-title .w2 {
-  color: #a41c35;
-}
-.details-row {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-}
-.work-text {
-  max-width: 814px;
-  flex: 1;
-}
-.rating-label,
-.rating-score {
-  font-family: Inter;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 120%;
-}
-.rating-block {
-  flex: 0 0 296px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.rating-label {
-  color: var(--White, #fbfbfb);
-}
-.rating-top {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.rating-stars {
-  margin-top: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-}
-.rating-score {
-  color: #fbfbfb;
-  padding-right: 8px;
-  color: var(--White, #fbfbfb);
 }
 #asideScroll {
   max-height: 0;
@@ -797,14 +585,7 @@
   gap: 8px;
 }
 
-.media-pagination .swiper-pagination-bullet {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #bdbdbd;
-  opacity: 1;
-  margin: 0;
-}
+
 .media-pagination .swiper-pagination-bullet-active {
   background: #ffffff;
 }
@@ -948,4 +729,470 @@
 .cta-btn:focus-visible {
   outline: none;
   box-shadow: var(--ring);
+}
+
+/* ===== MODAL BASE ===== */
+
+.project-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: none; /* .is-open => flex */
+  align-items: center;
+  justify-content: center;
+  -webkit-overflow-scrolling: touch;
+}
+
+.project-modal.is-open {
+  display: flex;
+}
+
+.project-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0.8;
+}
+
+.project-modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(1140px, 100vw - 64px);
+  max-height: calc(100vh - 80px);
+  padding: 32px 40px 32px;
+  border-radius: 16px;
+  background: #000;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: hidden;
+}
+
+.project-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.project-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ===== MEDIA ROW ===== */
+
+.modal-media-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.media-nav {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  border: 1px solid #505050;
+  background: #262626;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.modal-media {
+  position: relative;
+  flex: 1 1 auto;
+  max-width: 900px;
+  height: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #111;
+}
+
+/* swiper container повністю заповнює блок */
+#mediaSwiper,
+#mediaSwiper .swiper-wrapper,
+#mediaSwiper .swiper-slide {
+  width: 100%;
+  height: 100%;
+}
+
+#mediaSwiper .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* chips над зображенням */
+
+.media-tags {
+  position: absolute;
+  top: 16px;
+  z-index: 2;
+  display: flex;
+  gap: 12px;
+}
+
+.media-tags--left {
+  left: 16px;
+}
+
+.media-tags--right {
+  right: 16px;
+  align-items: center;
+  gap: 8px;
+}
+
+.media-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.24);
+  -webkit-backdrop-filter: blur(26px);
+  backdrop-filter: blur(26px);
+  color: #fbfbfb;
+  font: 500 14px/20px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  white-space: nowrap;
+}
+
+.media-ico {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+}
+
+/* dots під зображенням */
+
+.media-pagination {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.media-pagination .swiper-pagination-bullet,
+.media-pagination .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #bdbdbd;
+  opacity: 1;
+}
+
+.media-pagination .swiper-pagination-bullet-active,
+.media-pagination .dot.is-active {
+  background: #ffffff;
+}
+
+/* mobile-controls ховаємо за замовчуванням, показуємо нижче */
+
+.mobile-controls {
+  display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+/* ===== TEXT CONTENT ===== */
+
+.project-modal__content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+}
+
+.modal-title {
+  flex: 1 1 auto;
+  max-width: 720px;
+  color: #fbfbfb;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-weight: 500;
+  font-size: 48px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.modal-ctas {
+  width: 296px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* кнопки справа */
+
+.cta-btn {
+  display: flex;
+  width: auto;
+  height: 48px;
+  padding: 12px 24px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  color: #fbfbfb;
+  font: 500 16px/24px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background: #2e7bb2;
+  cursor: pointer;
+}
+
+.cta-btn__ico {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+}
+
+.cta-btn--red {
+  background: #a41c35;
+  border-color: #a41c35;
+}
+
+.cta-btn--blue {
+  background: #2e7bb2;
+  border-color: #2e7bb2;
+}
+
+/* блок “Work details + Rating” */
+
+.modal-details {
+  width: 100%;
+}
+
+.work-title {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  color: #fbfbfb;
+  font: 500 16px/24px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+.work-title .w2 {
+  color: #a41c35;
+}
+
+.details-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.work-text {
+  flex: 1 1 auto;
+  max-width: 720px;
+  color: rgba(251, 251, 251, 0.86);
+  font: 400 16px/1.6 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+/* Rating справа, як в макеті */
+
+.rating-block {
+  flex: 0 0 296px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.rating-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rating-label {
+  color: #fbfbfb;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.rating-score {
+  margin-right: 4px;
+  color: #fbfbfb;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 1300px) {
+  .project-modal__dialog {
+    width: 100vw;
+    max-width: 100%;
+    margin: 0 16px;
+    padding: 24px 16px 24px;
+    border-radius: 12px;
+  }
+
+  .modal-title {
+    font-size: clamp(26px, 4vw, 36px);
+  }
+
+  .details-row {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .project-modal__dialog {
+    max-height: 100vh;
+  }
+
+  .modal-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .modal-ctas {
+    width: 100%;
+    max-width: 380px;
+  }
+
+  .details-row {
+    flex-direction: column;
+  }
+
+  .rating-block {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  .modal-media {
+    height: min(50vh, 420px);
+  }
+}
+
+@media (max-width: 768px) {
+  .project-modal__dialog {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    padding: 56px 12px 20px;
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .project-modal__dialog::-webkit-scrollbar {
+    display: none;
+  }
+
+  .project-modal__close {
+    top: 8px;
+    right: 8px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .modal-media {
+    height: 260px;
+    border-radius: 12px;
+  }
+
+  /* мобільні стрілки під зображенням */
+  .modal-media-row .media-nav--prev,
+  .modal-media-row .media-nav--next {
+    display: none;
+  }
+
+  .modal-media-row {
+    gap: 0;
+  }
+
+  .mobile-controls {
+    display: flex;
+    margin-top: 12px;
+  }
+
+  .mobile-controls .media-nav {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid #505050;
+    background: #262626;
+  }
+
+  .mobile-controls .media-pagination {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .mobile-controls .media-pagination .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(251, 251, 251, 0.5);
+  }
+
+  .mobile-controls .media-pagination .dot.is-active {
+    background: #fbfbfb;
+  }
+
+  .modal-head {
+    gap: 12px;
+  }
+
+  .modal-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-title {
+    font-size: 22px;
+    line-height: 1.25;
+  }
+
+  .details-row {
+    gap: 16px;
+  }
+
+  .rating-block {
+    width: 100%;
+  }
 }

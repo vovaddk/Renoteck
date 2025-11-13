@@ -95,6 +95,9 @@ function closeActions(exceptBtnSelector) {
   const track = () => menu?.querySelector('.services-scrollbar'); // custom track
   if (!btn || !menu || !inner) return;
 
+  const isMobileServices = () =>
+    window.matchMedia('(max-width: 600px)').matches;
+
   const updateScrollbar = () => {
     const t = track();
     if (!t) return;
@@ -109,13 +112,40 @@ function closeActions(exceptBtnSelector) {
     t.style.setProperty('--svc-top', top + 'px');
   };
 
+  // позиціонуємо ПО ПРАВОМУ краю кнопки тільки на десктопі
+  const positionMenu = () => {
+    // на мобілці — тільки CSS (left/right: 12px)
+    if (isMobileServices()) {
+      menu.style.left = '';
+      menu.style.right = '';
+      return;
+    }
+
+    const parent = menu.offsetParent || menu.parentElement;
+    if (!parent) return;
+
+    const btnRect = btn.getBoundingClientRect();
+    const parentRect = parent.getBoundingClientRect();
+    const menuWidth = menu.offsetWidth;
+    if (!menuWidth) return;
+
+    const left = btnRect.right - parentRect.left - menuWidth;
+    menu.style.left = `${left}px`;
+    // на десктопі right нам не потрібен
+    menu.style.right = '';
+  };
+
   const open = () => {
     closeActions('#servicesBtn');
     if (menu.classList.contains('is-open')) return;
     menu.classList.add('is-open');
     btn.classList.add('is-open');
     btn.setAttribute('aria-expanded', 'true');
-    requestAnimationFrame(updateScrollbar);
+
+    requestAnimationFrame(() => {
+      positionMenu();
+      updateScrollbar();
+    });
   };
 
   const close = () => {
@@ -136,7 +166,12 @@ function closeActions(exceptBtnSelector) {
   });
 
   inner.addEventListener('scroll', updateScrollbar, { passive: true });
-  window.addEventListener('resize', updateScrollbar);
+
+  window.addEventListener('resize', () => {
+    if (!menu.classList.contains('is-open')) return;
+    positionMenu();
+    updateScrollbar();
+  });
 
   const primeHeads = () => {
     $$('.services-item__head', menu).forEach((h) => {
@@ -150,7 +185,6 @@ function closeActions(exceptBtnSelector) {
   primeHeads();
 
   menu.addEventListener('click', (ev) => {
-    // Клік по всій шапці відкриває/закриває
     const head = ev.target.closest('.services-item__head');
     if (head) {
       const item = head.closest('.services-item');
@@ -162,22 +196,21 @@ function closeActions(exceptBtnSelector) {
       return;
     }
 
-    // Старий тригер по стрілці теж лишається
     const tg = ev.target.closest('[data-toggle]');
     if (tg) {
       const item = tg.closest('.services-item');
       const headEl = item?.querySelector('.services-item__head');
       if (item) item.classList.toggle('is-open');
-      if (headEl)
+      if (headEl) {
         headEl.setAttribute(
           'aria-expanded',
           item.classList.contains('is-open')
         );
+      }
       requestAnimationFrame(updateScrollbar);
       return;
     }
 
-    // Клік по опції
     const row = ev.target.closest('.service-opt');
     if (row) {
       const input = row.querySelector('input');
@@ -200,6 +233,9 @@ function closeActions(exceptBtnSelector) {
     requestAnimationFrame(() => {
       primeHeads();
       updateScrollbar();
+      if (menu.classList.contains('is-open')) {
+        positionMenu();
+      }
     });
   }).observe(menu, { subtree: true, childList: true });
 })();
@@ -243,138 +279,233 @@ function closeActions(exceptBtnSelector) {
 /* ========= Media panel (aside scroll) ========= */
 (() => {
   const btn = document.querySelector('#mediaBtn');
-  const panel = document.querySelector('#asideScroll');
-  if (!btn || !panel) return;
+  const panel = document.querySelector('#asideScroll'); // .aside__scrollwrap
+  const aside = document.querySelector('.section-map__aside');
+
+  if (!btn || !panel || !aside) return;
+
+  const isMobile = () => window.matchMedia('(max-width: 1023px)').matches;
+
+  const getPanelFullHeight = () => {
+    panel.style.height = 'auto';
+    const base = panel.scrollHeight;
+
+    const last = panel.lastElementChild;
+    if (!last) return base;
+
+    const styles = window.getComputedStyle(last);
+    const mb = parseFloat(styles.marginBottom) || 0;
+
+    return base + mb;
+  };
+
+  const syncHeights = () => {
+    // десктоп — не чіпаємо inline-висоти
+    if (!isMobile()) {
+      aside.style.height = '';
+      panel.style.height = '';
+      aside.classList.toggle(
+        'panel-is-open',
+        panel.classList.contains('is-open')
+      );
+      return;
+    }
+
+    if (panel.classList.contains('is-open')) {
+      // ВІДКРИТО: рахуємо і фіксуємо
+      aside.style.height = 'auto';
+
+      const fullH = getPanelFullHeight();
+      panel.style.height = fullH + 'px';
+
+      const asideH = aside.scrollHeight;
+      aside.style.height = asideH + 'px';
+
+      aside.classList.add('panel-is-open');
+    } else {
+      // ЗАКРИТО: повністю складаємо панель і прибираємо зайву висоту aside
+      panel.style.height = '0px';
+      aside.style.height = ''; // <<< ключове — скинув інлайнову висоту
+      aside.classList.remove('panel-is-open');
+    }
+  };
 
   const open = () => {
-    // закриваємо інші меню, залишаємо лише media
     closeActions('#mediaBtn');
     btn.classList.add('is-open');
     btn.setAttribute('aria-expanded', 'true');
     panel.classList.add('is-open');
+
+    requestAnimationFrame(syncHeights);
   };
 
   const close = () => {
     btn.classList.remove('is-open');
     btn.setAttribute('aria-expanded', 'false');
     panel.classList.remove('is-open');
+
+    requestAnimationFrame(syncHeights);
   };
 
-  // toggle за кліком по кнопці
   btn.addEventListener('click', (ev) => {
     ev.stopPropagation();
     btn.classList.contains('is-open') ? close() : open();
   });
 
-  // клік поза панеллю — закрити
   document.addEventListener('click', (ev) => {
     if (btn.contains(ev.target) || panel.contains(ev.target)) return;
     close();
   });
 
-  // ВІДКРИВАЄМО ЗА ЗАМОВЧУВАННЯМ
+  window.addEventListener('resize', syncHeights);
+
+  panel.querySelectorAll('img').forEach((img) => {
+    if (img.complete) return;
+    img.addEventListener('load', syncHeights);
+  });
+
   requestAnimationFrame(open);
 })();
 
-/* ========= Project modal (single implementation) ========= */
+/* ========= Project modal + media swiper ========= */
 (() => {
   const modal = document.getElementById('projectModal');
   if (!modal) return;
 
   const dialog = modal.querySelector('.project-modal__dialog');
-  const triggers = document.querySelectorAll('.project, .project__link'); // увесь кард + лінк
+  const triggers = document.querySelectorAll('.project, .project__link');
   const closers = modal.querySelectorAll('[data-close]');
+
+  const swiperEl = document.getElementById('mediaSwiper');
+  const dots = document.getElementById('mediaDots');
+  const mobileSlot = document.getElementById('mediaDotsMobile');
+
+  const prevBtn = document.getElementById('mdPrev');
+  const nextBtn = document.getElementById('mdNext');
+  const prevMob = document.getElementById('mdPrevMobile');
+  const nextMob = document.getElementById('mdNextMobile');
+
+  const mq = window.matchMedia('(max-width: 767.98px)');
+
+  let mediaSwiper = null;
 
   const lockScroll = (on) => {
     document.documentElement.style.overflow = on ? 'hidden' : '';
+    document.body.style.overflow = on ? 'hidden' : '';
   };
 
-  let swiper = null;
-  const initSwiper = window.__initMediaSwiper || null; // якщо у тебе є ініціалізація окремо
+  const moveDots = () => {
+    if (!dots || !swiperEl || !mobileSlot) return;
 
-  function open(ev) {
+    if (mq.matches) {
+      if (!mobileSlot.contains(dots)) mobileSlot.appendChild(dots);
+      dots.classList.add('media-pagination--mobile');
+    } else {
+      if (!swiperEl.contains(dots)) swiperEl.appendChild(dots);
+      dots.classList.remove('media-pagination--mobile');
+    }
+
+    if (
+      mediaSwiper &&
+      mediaSwiper.pagination &&
+      mediaSwiper.pagination.update
+    ) {
+      mediaSwiper.pagination.update();
+    }
+  };
+
+  const initMediaSwiper = () => {
+    if (!swiperEl || typeof Swiper === 'undefined') return;
+
+    if (mediaSwiper) {
+      mediaSwiper.destroy(true, true);
+      mediaSwiper = null;
+    }
+
+    mediaSwiper = new Swiper(swiperEl, {
+      slidesPerView: 1,
+      loop: false,
+      rewind: true,
+      pagination: {
+        el: dots,
+        clickable: true,
+        bulletClass: 'swiper-pagination-bullet',
+        bulletActiveClass: 'swiper-pagination-bullet-active',
+      },
+    });
+
+    requestAnimationFrame(moveDots);
+  };
+
+  const destroyMediaSwiper = () => {
+    if (!mediaSwiper) return;
+    mediaSwiper.destroy(true, true);
+    mediaSwiper = null;
+  };
+
+  const handlePrev = (e) => {
+    e && e.preventDefault();
+    if (mediaSwiper) mediaSwiper.slidePrev();
+  };
+
+  const handleNext = (e) => {
+    e && e.preventDefault();
+    if (mediaSwiper) mediaSwiper.slideNext();
+  };
+
+  if (prevBtn) prevBtn.addEventListener('click', handlePrev);
+  if (nextBtn) nextBtn.addEventListener('click', handleNext);
+  if (prevMob) prevMob.addEventListener('click', handlePrev);
+  if (nextMob) nextMob.addEventListener('click', handleNext);
+
+  if (mq.addEventListener) {
+    mq.addEventListener('change', moveDots);
+  } else {
+    mq.addListener(moveDots);
+  }
+
+  const openModal = (ev) => {
     if (ev) ev.preventDefault();
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     lockScroll(true);
-    initSwiper && initSwiper(); // або прибери рядок, якщо ініціалізація вже є нижче
-  }
+    initMediaSwiper();
+  };
 
-  function close() {
+  const closeModal = () => {
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     lockScroll(false);
-  }
+    destroyMediaSwiper();
+  };
 
-  // клік по всій картці .project або по .project__link
   triggers.forEach((t) => {
-    // доступність для всієї картки
     if (t.classList.contains('project')) {
       t.setAttribute('role', 'button');
       t.setAttribute('tabindex', '0');
       t.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          open();
+          openModal(e);
         }
       });
     }
+
     t.addEventListener('click', (e) => {
-      // блокуємо перехід по <a>, модалка важливіша
       if (t.matches('.project__link')) e.preventDefault();
-      open();
+      openModal(e);
     });
   });
 
-  // закриття
-  closers.forEach((c) => c.addEventListener('click', close));
+  closers.forEach((c) => c.addEventListener('click', closeModal));
+
   modal.addEventListener('click', (e) => {
-    if (!dialog.contains(e.target)) close();
+    if (!dialog.contains(e.target)) closeModal();
   });
+
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') close();
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+      closeModal();
+    }
   });
 })();
-
-// 1) Ініціалізація Swiper з дефолтними bullet класами
-const mediaSwiper = new Swiper('#mediaSwiper', {
-  slidesPerView: 1,
-  loop: true,
-  autoHeight: true,
-  navigation: { prevEl: '#mdPrev', nextEl: '#mdNext' },
-  pagination: {
-    el: '#mediaDots', // цей самий вузол переносимо між слотами
-    clickable: true,
-    bulletClass: 'swiper-pagination-bullet',
-    bulletActiveClass: 'swiper-pagination-bullet-active',
-    // без renderBullet — використовуємо дефолтні <span>
-  },
-});
-
-// 2) Перенесення #mediaDots між десктоп/моб
-(() => {
-  const swiperRoot = document.getElementById('mediaSwiper');
-  const dots = document.getElementById('mediaDots');
-  const mobileSlot = document.getElementById('mediaDotsMobile');
-  if (!swiperRoot || !dots || !mobileSlot) return;
-
-  const mq = window.matchMedia('(max-width: 767.98px)');
-  const place = () => {
-    if (mq.matches) {
-      if (!mobileSlot.contains(dots)) mobileSlot.appendChild(dots);
-    } else {
-      if (!swiperRoot.contains(dots)) swiperRoot.appendChild(dots);
-    }
-    // Після перенесення оновити позиціонування всередині Swiper
-    mediaSwiper.pagination && mediaSwiper.pagination.render();
-    mediaSwiper.pagination && mediaSwiper.pagination.update();
-  };
-  mq.addEventListener
-    ? mq.addEventListener('change', place)
-    : mq.addListener(place);
-  place();
-})();
-const prevMob = document.getElementById('mdPrevMobile');
-const nextMob = document.getElementById('mdNextMobile');
-if (prevMob) prevMob.addEventListener('click', () => mediaSwiper.slidePrev());
-if (nextMob) nextMob.addEventListener('click', () => mediaSwiper.slideNext());
