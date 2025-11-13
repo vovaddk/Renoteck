@@ -355,9 +355,7 @@
     height: 44px;
     padding: 10px;
   }
-  .project-modal__close{
-      padding-top: 10px;
-  }
+
 }
 .action-btn--menu {
   display: inline-flex; 

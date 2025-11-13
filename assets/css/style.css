@@ -782,7 +782,6 @@
   display: grid;
   place-items: center;
   cursor: pointer;
-
 }
 
 .project-modal__body {
@@ -1108,7 +1107,7 @@
     height: 100vh;
     max-height: 100vh;
     border-radius: 0;
-    padding: 56px 12px 20px;
+    padding: 60px 12px 20px;
     overflow: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -1118,12 +1117,11 @@
   }
 
   .project-modal__close {
-    top: 8px;
+    top: 12px;
     right: 8px;
     width: 36px;
     height: 36px;
   }
-
   .modal-media {
     height: 260px;
     border-radius: 12px;
