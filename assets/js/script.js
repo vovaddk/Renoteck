@@ -279,47 +279,64 @@ function closeActions(exceptBtnSelector) {
 /* ========= Media panel (aside scroll) ========= */
 (() => {
   const btn = document.querySelector('#mediaBtn');
-  const panel = document.querySelector('#asideScroll'); // .aside__scrollwrap
+  const panel = document.querySelector('#asideScroll'); 
+  const bottomCard = document.querySelector('.aside-card--bottom'); 
+  const projectsList = document.querySelector('#projects'); 
   const aside = document.querySelector('.section-map__aside');
 
-  if (!btn || !panel || !aside) return;
+  if (!btn || !panel || !aside || !bottomCard) return;
 
   const isMobile = () => window.matchMedia('(max-width: 1023px)').matches;
 
   const syncHeights = () => {
-    // На десктопі даємо CSS усе вирішувати
+
     if (!isMobile()) {
       aside.style.height = '';
       panel.style.height = '';
+      panel.style.maxHeight = '';
       aside.classList.toggle(
         'panel-is-open',
+        panel.classList.contains('is-open')
+      );
+      bottomCard.classList.toggle(
+        'is-open',
         panel.classList.contains('is-open')
       );
       return;
     }
 
-    // Мобільний / планшет – працюємо динамічно
     if (panel.classList.contains('is-open')) {
-      // 1) відкрили: рахуємо повну висоту aside__scrollwrap
-      panel.style.height = 'auto'; // скинули, щоб порахувалось
-      const wrapH = panel.scrollHeight; // ПОВНА висота aside__scrollwrap is-open
-      panel.style.height = wrapH + 'px';
 
-      // 2) тепер рахуємо висоту всього section-map__aside
-      aside.style.height = 'auto';
-      const asideH = aside.scrollHeight;
-      aside.style.height = asideH + 'px';
-
+      panel.style.height = 'auto';
+      panel.style.maxHeight = 'none';
+      
+      const panelContentHeight = projectsList ? projectsList.scrollHeight : panel.scrollHeight;
+      
+      const maxPanelHeight = Math.min(panelContentHeight, 400);
+      panel.style.height = maxPanelHeight + 'px';
+      panel.style.maxHeight = maxPanelHeight + 'px';
+      
+      requestAnimationFrame(() => {
+        aside.style.height = 'auto';
+        const finalAsideHeight = aside.scrollHeight;
+        aside.style.height = finalAsideHeight + 'px';
+      });
+      
       aside.classList.add('panel-is-open');
+      bottomCard.classList.add('is-open'); 
     } else {
-      // Закритий стан: висота тільки під «шапку» aside
+
       panel.style.height = '0px';
-
-      aside.style.height = 'auto';
-      const asideH = aside.scrollHeight;
-      aside.style.height = asideH + 'px';
-
+      panel.style.maxHeight = '0px';
+      
+      requestAnimationFrame(() => {
+        aside.style.height = 'auto';
+        const asideH = aside.scrollHeight;
+        aside.style.height = asideH + 'px';
+      });
+      
       aside.classList.remove('panel-is-open');
+      bottomCard.classList.remove('is-open'); 
     }
   };
 
@@ -329,7 +346,9 @@ function closeActions(exceptBtnSelector) {
     btn.setAttribute('aria-expanded', 'true');
     panel.classList.add('is-open');
 
-    requestAnimationFrame(syncHeights);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(syncHeights);
+    });
   };
 
   const close = () => {
@@ -337,33 +356,40 @@ function closeActions(exceptBtnSelector) {
     btn.setAttribute('aria-expanded', 'false');
     panel.classList.remove('is-open');
 
-    requestAnimationFrame(syncHeights);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(syncHeights);
+    });
   };
 
-  // toggle за кліком по кнопці
   btn.addEventListener('click', (ev) => {
     ev.stopPropagation();
     btn.classList.contains('is-open') ? close() : open();
   });
 
-  // клік поза панеллю — закрити
   document.addEventListener('click', (ev) => {
     if (btn.contains(ev.target) || panel.contains(ev.target)) return;
-    close();
+    if (btn.classList.contains('is-open')) {
+      close();
+    }
   });
 
-  // ресайз — перерахувати
-  window.addEventListener('resize', syncHeights);
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(syncHeights, 100);
+  });
 
-  // якщо всередині є картинки — після завантаження теж перерахувати
   const imgs = panel.querySelectorAll('img');
   imgs.forEach((img) => {
     if (img.complete) return;
-    img.addEventListener('load', syncHeights);
+    img.addEventListener('load', () => {
+      if (panel.classList.contains('is-open')) {
+        syncHeights();
+      }
+    });
   });
 
-  // Старт: панель відкрита
-  requestAnimationFrame(open);
+  syncHeights();
 })();
 
 /* ========= Project modal + media swiper ========= */

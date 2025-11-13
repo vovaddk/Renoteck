@@ -165,7 +165,7 @@
   width: 446px;
   height: 545px;
   max-height: 565px !important;
-  padding: 20px 4px 0;
+  padding: 20px 12px 0;
   justify-content: flex-end;
   align-items: flex-start;
   gap: 10px;
@@ -189,7 +189,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
 }
 .aside__left {
   display: inline-flex;
@@ -213,18 +212,24 @@
   padding: 0;
   z-index: 1200;
 }
+
 .action-btn {
-  width: 137px;
+  flex: 1;
+  min-width: 0;
   padding: 12px 20px;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   border-radius: 12px;
   border: 2px solid var(--Red, #a41c35);
   background: var(--Red, #a41c35);
 }
+
 .action-btn.is-open {
-  min-width: 137px;
+  flex: 1;
 }
+
 .action-btn .ico {
   width: 20px;
   height: 20px;
@@ -237,11 +242,13 @@
   font-weight: 500;
   line-height: 24px;
 }
-.aside__cta,
 .aside__cta a {
   width: auto;
-  height: 48px;
-  padding: 0 12px;
+  max-height: 48px;
+  padding: 0;
+}
+.aside__cta {
+  padding: 16px 0;
 }
 .cta-btn {
   width: auto;
@@ -343,7 +350,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 14px 16px 20px;
 }
 .action-btn .state-close,
 .action-btn.is-open .state-default,
@@ -354,6 +360,7 @@
   width: 330px;
   height: 85px;
   display: block;
+  padding: 14px 0 20px 0;
 }
 .action-btn.is-open .state-close {
   display: inline-flex;
@@ -767,7 +774,9 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  overflow-y: hidden;
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .project-modal__close {
@@ -837,21 +846,23 @@
 }
 
 .media-tags {
+  width: 100%;
   position: absolute;
   top: 16px;
   z-index: 2;
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
-.media-tags--left {
-  left: 16px;
+.media-chip {
+  margin-left: 20px;
 }
 
-.media-tags--right {
-  right: 16px;
-  align-items: center;
-  gap: 8px;
+/* Останній чіп */
+.media-chip--last {
+  margin-left: auto;
+  margin-right: 20px;
 }
 
 .media-chip {
